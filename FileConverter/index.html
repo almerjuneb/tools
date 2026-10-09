@@ -1,0 +1,74 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <meta name="theme-color" content="#f4f5f2">
+  <meta name="description" content="Convert PDFs and image batches to useful document formats, privately in your browser.">
+  <title>File Converter | AJB Tools</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=DM+Mono:wght@400;500&family=Manrope:wght@400;500;600;700;800&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="style.css">
+  <script src="app.js" defer></script>
+</head>
+<body>
+  <div class="app-shell">
+    <header class="topbar">
+      <a class="brand" href="/" aria-label="AJB Tools home"><span class="brand-mark">FILE</span><span><strong>FILE CONVERTER</strong><small>AJB PERSONAL TOOLKIT</small></span></a>
+      <div class="private-label"><span></span> FILES STAY IN THIS BROWSER</div>
+      <a class="back-link" href="/">ALL TOOLS <span aria-hidden="true">↗</span></a>
+    </header>
+    <main>
+      <section class="intro"><div><p class="eyebrow">03 / DOCUMENT WORKFLOW</p><h1>Move files forward.</h1><p class="intro-copy">I built this converter for the formats I reach for most: Word documents that keep a PDF’s appearance, tidy page images, and PDFs made from image batches.</p></div><div class="format-mark"><span>PDF</span><i>→</i><span>DOCX</span></div></section>
+
+      <section class="converter" aria-label="File conversion workspace">
+        <div class="mode-bar" role="tablist" aria-label="Choose a conversion">
+          <button class="mode-button active" type="button" role="tab" aria-selected="true" data-mode="pdf-docx"><span>01</span> PDF → DOCX</button>
+          <button class="mode-button" type="button" role="tab" aria-selected="false" data-mode="pdf-images"><span>02</span> PDF → PNG</button>
+          <button class="mode-button" type="button" role="tab" aria-selected="false" data-mode="images-pdf"><span>03</span> IMAGES → PDF</button>
+        </div>
+        <div class="workspace">
+          <div class="input-column">
+            <div class="mode-description" id="mode-description"><span class="step-label">VISUAL LAYOUT / PAGE BY PAGE</span><h2>PDF to Word</h2><p>For the closest visual match, I render each PDF page as a high-resolution image and place it on its own Word page.</p><div class="fidelity-note"><span aria-hidden="true">i</span><span><strong>Layout-preserving, not text-editable.</strong><small>The DOCX keeps the page appearance; text inside it is an image.</small></span></div></div>
+            <label class="drop-zone" id="drop-zone" for="file-input">
+              <input id="file-input" type="file" accept="application/pdf" hidden>
+              <span class="upload-icon" aria-hidden="true"><svg viewBox="0 0 24 24" fill="none"><path d="M12 16V4m0 0L7.5 8.5M12 4l4.5 4.5M5 15v4a1 1 0 0 0 1 1h14a1 1 0 0 0 1-1v-4"/></svg></span>
+              <span class="drop-copy"><strong id="drop-title">Drop a PDF to get started</strong><small><span>Browse files</span> · Up to 40 MB</small></span>
+              <span class="add-mark" aria-hidden="true">+</span>
+            </label>
+            <div class="file-list" id="file-list" hidden></div>
+
+            <div class="options" id="pdf-options">
+              <div class="option-row"><label for="quality">Render quality</label><select id="quality"><option value="144">Standard · 144 DPI</option><option value="192">High · 192 DPI</option><option value="240">Print · 240 DPI</option></select></div>
+              <div class="option-row"><label for="page-cap">Page limit</label><select id="page-cap"><option value="25">Up to 25 pages</option><option value="10">Up to 10 pages</option><option value="50">Up to 50 pages</option></select></div>
+              <p class="memory-note">Large PDFs use substantial browser memory. For best results, convert up to 25 pages at a time.</p>
+            </div>
+
+            <div class="options" id="image-options" hidden>
+              <div class="option-row"><label for="page-size">Page size</label><select id="page-size"><option value="source">Fit each image</option><option value="a4">A4</option><option value="letter">US Letter</option></select></div>
+              <div class="option-row"><label for="orientation">Page orientation</label><select id="orientation"><option value="auto">Match image</option><option value="portrait">Portrait</option><option value="landscape">Landscape</option></select></div>
+              <div class="option-row"><label for="pdf-quality">Image quality</label><div class="quality-input"><input id="pdf-quality" type="range" min="65" max="100" value="92"><output id="pdf-quality-value">92%</output></div></div>
+              <p class="memory-note">Select up to 20 images. Each image becomes a PDF page, fitted without cropping.</p>
+            </div>
+
+            <div class="conversion-actions"><button class="convert-button" id="convert-button" type="button" disabled><span>Convert files</span><span aria-hidden="true">→</span></button><button class="clear-button" id="clear-button" type="button" disabled title="Clear selected files" aria-label="Clear selected files">×</button></div>
+            <div class="progress-track" id="progress-track" hidden><span id="progress-bar"></span></div>
+            <p class="status-line" id="status-line" role="status" aria-live="polite">Choose a file to see the conversion options.</p>
+          </div>
+
+          <aside class="preview-column" aria-labelledby="preview-title">
+            <div class="preview-header"><div><span class="step-label">PREVIEW / OUTPUT</span><h2 id="preview-title">Ready when you are</h2></div><span class="privacy-dot" title="Processed locally"></span></div>
+            <div class="preview-stage" id="preview-stage"><div class="preview-empty" id="preview-empty"><span class="document-icon"><svg viewBox="0 0 24 24" fill="none"><path d="M13 3H6a2 2 0 0 0-2 2v14a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V10z"/><path d="M13 3v7h7M8 14h8m-8 3h6"/></svg></span><strong>Your file, ready for its next format.</strong><small>Choose a conversion and add your file to see a preview.</small></div><img id="preview-image" alt="First page preview" hidden></div>
+            <div class="preview-meta"><span>SELECTED</span><strong id="selected-count">0 files</strong><span>OUTPUT</span><strong id="output-type">DOCX · VISUAL</strong></div>
+            <button class="download-button" id="download-button" type="button" disabled><svg viewBox="0 0 24 24" fill="none" aria-hidden="true"><path d="M12 3v12m0 0 4-4m-4 4-4-4M5 16v4h14v-4"/></svg><span id="download-label">Convert to DOCX</span></button>
+            <p class="privacy-note"><span aria-hidden="true">◈</span> I process files locally; nothing is uploaded.</p>
+          </aside>
+        </div>
+      </section>
+      <footer class="page-footer"><span>FILE CONVERTER / AJB PERSONAL TOOLKIT</span><span>LOCAL PROCESSING <i>·</i> 2026</span></footer>
+    </main>
+  </div>
+  <div id="toast" class="toast" role="status" aria-live="polite"></div>
+</body>
+</html>

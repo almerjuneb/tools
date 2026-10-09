@@ -1,0 +1,97 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <meta name="theme-color" content="#111716">
+  <meta name="description" content="A private in-browser image workspace for background removal, resizing, and format conversion.">
+  <title>Image Studio | AJB Tools</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=DM+Mono:wght@400;500&family=Manrope:wght@400;500;600;700;800&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="style.css">
+  <script src="app.js" defer></script>
+</head>
+<body>
+  <div class="app-shell">
+    <header class="topbar">
+      <a class="brand" href="/" aria-label="AJB Tools home"><span class="brand-mark">IMG</span><span><strong>IMAGE STUDIO</strong><small>AJB PERSONAL TOOLKIT</small></span></a>
+      <div class="local-status"><span></span> PRIVATE / IN-BROWSER</div>
+      <a class="back-link" href="/">ALL TOOLS <span aria-hidden="true">↗</span></a>
+    </header>
+
+    <main>
+      <section class="intro">
+        <div><p class="eyebrow">01 / IMAGE WORKSPACE</p><h1>Give every image<br>a little more.</h1><p class="intro-copy">I built this workspace for quick, polished image edits: clean cutouts, sharper enlargements, and the right format for wherever an image needs to go.</p></div>
+        <div class="intro-stamp"><span>IMG</span><small>PROCESS<br>LOCALLY</small></div>
+      </section>
+
+      <section class="upload-row" aria-label="Choose an image">
+        <label class="drop-zone" id="drop-zone" for="image-file">
+          <input id="image-file" type="file" accept="image/png,image/jpeg,image/webp" hidden>
+          <span class="upload-icon" aria-hidden="true"><svg viewBox="0 0 24 24" fill="none"><path d="M12 16V4m0 0L7.5 8.5M12 4l4.5 4.5M5 15v4a1 1 0 0 0 1 1h12a1 1 0 0 0 1-1v-4"/></svg></span>
+          <span class="drop-copy"><strong id="upload-title">Drop an image to get started</strong><small>or <span>browse your files</span> · PNG, JPG, WebP · up to 20 MB</small></span>
+          <span class="upload-plus" aria-hidden="true">+</span>
+        </label>
+        <div class="file-summary" id="file-summary" hidden><span class="file-type" id="file-type">IMG</span><span class="file-copy"><strong id="file-name"></strong><small id="file-details"></small></span><button class="icon-button" id="remove-image" type="button" aria-label="Remove image" title="Remove image">×</button></div>
+      </section>
+
+      <section class="editor" aria-label="Image editing tools">
+        <div class="tool-rail" role="tablist" aria-label="Image operation">
+          <button class="tool-tab active" id="tab-remove" type="button" role="tab" aria-selected="true" data-operation="remove"><span>01</span> Remove background</button>
+          <button class="tool-tab" id="tab-upscale" type="button" role="tab" aria-selected="false" data-operation="upscale"><span>02</span> Upscale</button>
+          <button class="tool-tab" id="tab-convert" type="button" role="tab" aria-selected="false" data-operation="convert"><span>03</span> Convert format</button>
+        </div>
+
+        <div class="editor-layout">
+          <div class="controls-panel">
+            <div class="operation-panel" data-panel="remove">
+              <span class="panel-kicker">SUBJECT / ISOLATION</span><h2>Remove the background</h2>
+              <p class="panel-description">Create a transparent cutout with an on-device AI model. Your image never leaves your browser.</p>
+              <div class="model-note"><span aria-hidden="true">◈</span><span><strong>First run downloads the AI model.</strong><small>About 40 MB, then cached by your browser.</small></span></div>
+              <label class="control-label" for="matte-color">Preview matte</label>
+              <div class="color-row"><span>Checkerboard</span><label class="color-picker"><input id="matte-color" type="color" value="#d9e1d9" aria-label="Preview matte color"><span id="matte-value">#D9E1D9</span></label></div>
+              <button class="action-button" id="remove-background" type="button" disabled><span aria-hidden="true">✳</span> Remove background <span class="button-arrow">→</span></button>
+            </div>
+
+            <div class="operation-panel" data-panel="upscale" hidden>
+              <span class="panel-kicker">RESAMPLE / ENLARGE</span><h2>Bring it up to size</h2>
+              <p class="panel-description">Enlarge with high-quality Lanczos resampling. This improves scaling, but can’t recover detail that wasn’t in the original.</p>
+              <label class="control-label" for="scale-factor">Scale factor</label>
+              <div class="scale-options" role="group" aria-label="Image scale factor">
+                <label><input type="radio" name="scale" value="2" checked><span><strong>2×</strong><small>Balanced</small></span></label>
+                <label><input type="radio" name="scale" value="4"><span><strong>4×</strong><small>Maximum</small></span></label>
+              </div>
+              <div class="output-dimensions" id="output-dimensions"><span>OUTPUT SIZE</span><strong>Choose an image</strong></div>
+              <button class="action-button" id="upscale-image" type="button" disabled><span aria-hidden="true">↗</span> Upscale image <span class="button-arrow">→</span></button>
+            </div>
+
+            <div class="operation-panel" data-panel="convert" hidden>
+              <span class="panel-kicker">EXPORT / FORMAT</span><h2>Make it fit the brief</h2>
+              <p class="panel-description">Convert between common image formats and set a custom output size.</p>
+              <label class="control-label" for="format">Output format</label>
+              <select id="format"><option value="image/png">PNG · transparent</option><option value="image/jpeg">JPEG · compact</option><option value="image/webp">WebP · modern</option></select>
+              <div class="dimension-fields"><div><label class="control-label" for="width">Width</label><input id="width" type="number" min="1" max="12000" placeholder="Original"></div><div><label class="control-label" for="height">Height</label><input id="height" type="number" min="1" max="12000" placeholder="Original"></div></div>
+              <label class="control-label quality-label" for="quality">Quality <output id="quality-value">90%</output></label>
+              <input class="quality-slider" id="quality" type="range" min="40" max="100" value="90">
+              <div class="color-row jpg-background" id="jpg-background"><span>JPEG background</span><label class="color-picker"><input id="jpg-color" type="color" value="#ffffff" aria-label="JPEG background color"><span id="jpg-value">#FFFFFF</span></label></div>
+              <button class="action-button" id="convert-image" type="button" disabled><span aria-hidden="true">⇩</span> Convert image <span class="button-arrow">→</span></button>
+            </div>
+
+            <div class="processing-status" id="processing-status" role="status" aria-live="polite"><span class="status-dot"></span><span id="status-message">Choose an image to begin.</span></div>
+          </div>
+
+          <div class="preview-panel">
+            <div class="preview-head"><div><span class="panel-kicker">CANVAS / 01</span><h2>Preview</h2></div><label class="compare-toggle" id="compare-control" hidden><input id="compare-original" type="checkbox"><span></span> Compare original</label></div>
+            <div class="preview-stage" id="preview-stage"><div class="preview-empty" id="preview-empty"><span>01</span><strong>Your image will appear here</strong><small>Start by selecting or dropping an image above.</small></div><img id="image-preview" alt="Edited image preview" hidden></div>
+            <div class="preview-footer"><span id="preview-label">NO IMAGE</span><span id="output-info">—</span></div>
+            <button class="download-button" id="download-image" type="button" disabled><svg viewBox="0 0 24 24" fill="none" aria-hidden="true"><path d="M12 3v12m0 0 4-4m-4 4-4-4M5 16v4h14v-4"/></svg> Download image <span id="download-format">PNG</span></button>
+          </div>
+        </div>
+      </section>
+      <footer class="page-footer"><span>IMAGE STUDIO / AJB PERSONAL TOOLKIT</span><span>YOUR FILES STAY LOCAL <i>·</i> 2026</span></footer>
+    </main>
+  </div>
+  <div id="toast" class="toast" role="status" aria-live="polite"></div>
+</body>
+</html>
