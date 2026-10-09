@@ -1,0 +1,12 @@
+{
+  "name": "ajb-personal-tools",
+  "version": "1.0.0",
+  "private": true,
+  "type": "module",
+  "engines": {
+    "node": ">=18"
+  },
+  "scripts": {
+    "build": "node scripts/build-tools.js"
+  }
+}
