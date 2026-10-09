@@ -4,7 +4,7 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <meta name="theme-color" content="#f5f7fb">
-    <title>Tablecraft — IDNOWTXT to Excel Table</title>
+    <title>TableCraft | IDNOW TXT to Excel Reports</title>
     <link rel="preconnect" href="https://fonts.googleapis.com">
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
     <link href="https://fonts.googleapis.com/css2?family=DM+Sans:wght@400;500;600;700&family=Manrope:wght@400;500;600;700;800&display=swap" rel="stylesheet">
@@ -19,15 +19,15 @@
                 <span class="brand-mark" aria-hidden="true"><span></span><span></span><span></span><span></span></span>
                 <span>tablecraft<span class="brand-dot">.</span></span>
             </a>
-            <div class="topbar-right"><span class="secure-indicator"><span></span> Files stay on your device</span><span class="topbar-divider"></span><span class="edition">TXT → XLSX</span></div>
+            <div class="topbar-right"><span class="secure-indicator"><span></span> Your files stay on your device</span><span class="topbar-divider"></span><span class="edition">IDNOW → XLSX</span></div>
         </header>
 
         <main>
             <section class="hero">
                 <div class="hero-copy">
-                    <div class="eyebrow"><span class="eyebrow-line"></span> SPREADSHEET STUDIO</div>
-                    <h1>Make the data from<br>IDNOW <span>beautifully.</span></h1>
-                    <p>Turn a plain text export from IDNOW into a polished, date-sorted Excel spreadsheet in seconds.</p>
+                    <div class="eyebrow"><span class="eyebrow-line"></span> BUILT FOR IDNOW REPORTS</div>
+                    <h1>Make IDNOW exports<br><span>report-ready.</span></h1>
+                    <p>I built TableCraft for my IDNOW workflow. It turns exported .txt files into clear, date-sorted Excel tables so I can review records and prepare reports faster.</p>
                 </div>
                 <div class="hero-art" aria-hidden="true">
                     <div class="art-glow"></div><div class="art-sheet"><div class="art-sheet-top"><i></i><i></i><i></i><b>Q3 RECORDS</b></div><div class="art-grid"><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span></div><div class="art-badge"><span>↗</span> Sorted by date</div></div>
@@ -35,20 +35,20 @@
             </section>
 
             <section class="workspace" aria-label="TXT to Excel workspace">
-                <div class="section-heading"><div><div class="step-label"><span>01</span> IMPORT YOUR DATA</div><h2>Start with a text file</h2></div><button id="sampleButton" class="text-button" type="button"><span aria-hidden="true">✳</span> Load sample data</button></div>
+                <div class="section-heading"><div><div class="step-label"><span>01</span> IMPORT AN IDNOW EXPORT</div><h2>Start with a .txt file</h2></div><button id="sampleButton" class="text-button" type="button"><span aria-hidden="true">✳</span> Try a sample export</button></div>
                 <div id="dropZone" class="drop-zone" tabindex="0" role="button" aria-label="Choose or drop a text file">
                     <input id="fileInput" type="file" accept=".txt,.tsv,.csv,text/plain,text/csv" hidden>
                     <div class="upload-icon"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M12 16V4m0 0L7.5 8.5M12 4l4.5 4.5M5 14.5v4A1.5 1.5 0 0 0 6.5 20h11a1.5 1.5 0 0 0 1.5-1.5v-4"/></svg></div>
-                    <div class="drop-copy"><strong>Drop your .txt file here</strong><span>or <button id="browseButton" class="inline-button" type="button">browse files</button> from your computer</span></div>
+                    <div class="drop-copy"><strong>Drop your IDNOW .txt export here</strong><span>or <button id="browseButton" class="inline-button" type="button">choose a file</button> from your computer</span></div>
                     <div class="file-types"><span>.TXT</span><span>.TSV</span><span>.CSV</span><small>Up to 10 MB</small></div>
                 </div>
                 <div id="fileNotice" class="file-notice" hidden><span class="file-symbol">TXT</span><span id="fileName" class="file-name"></span><span id="fileMeta" class="file-meta"></span><button id="removeFile" class="icon-button" type="button" aria-label="Remove imported file">×</button></div>
-                <div class="format-hint"><span class="hint-icon">i</span><span><strong>Works best with headers.</strong> Tab, comma, semicolon, or pipe-delimited files are detected automatically.</span><button id="formatToggle" class="hint-link" type="button" aria-expanded="false">See expected columns <span>⌄</span></button></div>
+                <div class="format-hint"><span class="hint-icon">i</span><span><strong>IDNOW exports work best with headers.</strong> Tab, comma, semicolon, or pipe-delimited files are detected automatically.</span><button id="formatToggle" class="hint-link" type="button" aria-expanded="false">View supported columns <span>⌄</span></button></div>
                 <div id="formatDetails" class="format-details" hidden>Common columns include <strong>IDNow ID</strong>, <strong>ID NUMBER</strong>, <strong>NAME</strong>, <strong>Course</strong>, <strong>Name of Guardian</strong>, <strong>Address</strong>, <strong>Contact Number</strong>, <strong>Last Printed</strong>, and <strong>Date Created</strong>. Column names are matched flexibly; extra columns are kept in the preview and can be selected for export.</div>
             </section>
 
             <section class="results" aria-label="Data preview">
-                <div class="results-head"><div><div class="step-label"><span>02</span> REVIEW &amp; EXPORT</div><h2>Your spreadsheet preview</h2><p class="results-subtitle">Sorted by last printed date, newest first.</p></div><button id="exportButton" class="export-button" type="button" disabled><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M12 3v12m0 0 4.5-4.5M12 15l-4.5-4.5M5 17v3h14v-3"/></svg><span>Export Excel</span><span class="export-ext">.XLSX</span></button></div>
+                <div class="results-head"><div><div class="step-label"><span>02</span> REVIEW &amp; EXPORT</div><h2>Your report preview</h2><p class="results-subtitle">Sorted by most recent print date for a faster review.</p></div><button id="exportButton" class="export-button" type="button" disabled><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M12 3v12m0 0 4.5-4.5M12 15l-4.5-4.5M5 17v3h14v-3"/></svg><span>Export Excel</span><span class="export-ext">.XLSX</span></button></div>
                 <div class="stats-row">
                     <div class="stat-card"><span class="stat-icon records-icon">▦</span><div><span class="stat-label">TOTAL RECORDS</span><strong id="totalCount">0</strong></div></div>
                     <div class="stat-card"><span class="stat-icon recent-icon">↗</span><div><span class="stat-label">PRINTED THIS WEEK</span><strong id="recentCount">0</strong></div></div>
@@ -61,13 +61,13 @@
                 </section>
                 <div class="table-card">
                     <div class="table-toolbar"><div class="table-title"><span class="live-dot"></span><strong>Records</strong><span id="visibleCount" class="row-count">0 rows</span></div><label class="search-box"><svg viewBox="0 0 24 24" aria-hidden="true"><circle cx="10.8" cy="10.8" r="6.3"/><path d="m15.5 15.5 4 4"/></svg><input id="searchInput" type="search" placeholder="Search records…" aria-label="Search records" disabled><kbd>Ctrl K</kbd></label><label class="sort-control" for="sortSelect"><span>Sort</span><select id="sortSelect" disabled><option value="desc">Newest first</option><option value="asc">Oldest first</option></select></label></div>
-                    <div id="emptyState" class="empty-state"><div class="empty-illustration"><div class="empty-paper"><span></span><span></span><span></span></div><span class="empty-spark spark-one">✦</span><span class="empty-spark spark-two">✧</span></div><strong>Your data will look right at home here</strong><p>Upload a text file or load the sample to see your formatted spreadsheet preview.</p></div>
+                    <div id="emptyState" class="empty-state"><div class="empty-illustration"><div class="empty-paper"><span></span><span></span><span></span></div><span class="empty-spark spark-one">✦</span><span class="empty-spark spark-two">✧</span></div><strong>Your report preview will appear here</strong><p>Add an IDNOW export or try a sample to review the table before downloading your Excel report.</p></div>
                     <div id="tableWrap" class="table-wrap" hidden><table id="dataTable"><thead></thead><tbody></tbody></table></div>
                     <div id="noResults" class="no-results" hidden>No matching rows. Try another search.</div>
                     <div class="table-footer"><span id="footerText">Waiting for a file</span><span><span class="footer-check">✓</span> Dates sorted automatically</span></div>
                 </div>
             </section>
-            <footer class="page-footer"><span>Thoughtful spreadsheets, minus the busywork.</span><span>TABLECRAFT <i>·</i> BUILT FOR YOUR WORKFLOW</span></footer>
+            <footer class="page-footer"><span>Built to make my IDNOW reporting workflow faster.</span><span>TABLECRAFT <i>·</i> BUILT BY AJB</span></footer>
         </main>
     </div>
     <div id="toast" class="toast" role="status" aria-live="polite"></div>

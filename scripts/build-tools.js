@@ -1,4 +1,4 @@
-import { access, cp, mkdir, readdir, rm, writeFile } from 'node:fs/promises';
+import { access, cp, mkdir, readFile, readdir, rm, writeFile } from 'node:fs/promises';
 import { basename, dirname, join, resolve } from 'node:path';
 import { fileURLToPath } from 'node:url';
 
@@ -27,8 +27,17 @@ for (const entry of entries) {
     recursive: true,
     filter: sourcePath => !['.git', '.vercel', 'node_modules'].includes(basename(sourcePath))
   });
+  let metadata = {};
+  try {
+    metadata = JSON.parse(await readFile(join(sourceDirectory, 'tool.json'), 'utf8'));
+  } catch (error) {
+    if (error.code !== 'ENOENT') throw error;
+  }
+
+  const description = typeof metadata.description === 'string' ? metadata.description.trim() : '';
   tools.push({
     name: entry.name,
+    description: description || 'A useful tool in my personal collection.',
     url: `/${encodeURIComponent(entry.name)}/index.html`
   });
 }

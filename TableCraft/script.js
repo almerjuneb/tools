@@ -143,7 +143,7 @@
 
 	function processText(text, name) {
 		const parsed = parseDelimited(text);
-		if (!parsed.length) { showToast('This file does not contain any data.'); return; }
+		if (!parsed.length) { showToast('I couldn’t find any records in this file.'); return; }
 		let headers;
 		let rows;
 		if (isHeaderRow(parsed[0])) {
@@ -159,10 +159,10 @@
 		const width = Math.max(headers.length, ...rows.map(row => row.length));
 		if (width > headers.length) headers = headers.concat(Array.from({ length: width - headers.length }, (_, index) => `Column ${headers.length + index + 1}`));
 		rows = rows.filter(row => row.some(cell => cell !== '')).map(row => Array.from({ length: headers.length }, (_, index) => row[index] ?? ''));
-		if (!rows.length) { showToast('The file contains headers but no data rows.'); return; }
+		if (!rows.length) { showToast('I found the column headers, but there are no data rows to report.'); return; }
 		setDataset(headers, rows, name);
-		if (identifyPrintColumn(headers) < 0) showToast('Imported data. No “Last Printed” column was found, so date sorting is unavailable.');
-		else showToast(`${rows.length.toLocaleString()} records imported and sorted by print date.`);
+		if (identifyPrintColumn(headers) < 0) showToast('Import complete. I couldn’t find a “Last Printed” column, so date sorting is unavailable.');
+		else showToast(`Imported ${rows.length.toLocaleString()} records and sorted them by print date.`);
 	}
 
 	function decodeTextFile(buffer) {
@@ -195,13 +195,13 @@
 	function handleFile(file) {
 		if (!file) return;
 		if (!/\.(txt|tsv|csv)$/i.test(file.name) && !/^text\//.test(file.type)) {
-			showToast('Please choose a .txt, .tsv, or .csv file.');
+			showToast('Please choose an IDNOW export in .txt, .tsv, or .csv format.');
 			return;
 		}
-		if (file.size > 10 * 1024 * 1024) { showToast('That file is over the 10 MB limit.'); return; }
+		if (file.size > 10 * 1024 * 1024) { showToast('This file exceeds the 10 MB upload limit.'); return; }
 		const reader = new FileReader();
 		reader.onload = () => processText(decodeTextFile(reader.result), file.name);
-		reader.onerror = () => showToast('The file could not be read. Please try again.');
+		reader.onerror = () => showToast('I couldn’t read this file. Please try again.');
 		reader.readAsArrayBuffer(file);
 	}
 
@@ -271,9 +271,9 @@
 
 	function exportWorkbook() {
 		if (!state.rows.length) return;
-		if (!window.XLSX) { showToast('Excel export library did not load. Check your internet connection and reload.'); return; }
+		if (!window.XLSX) { showToast('The Excel export library didn’t load. Check your connection and try again.'); return; }
 		const selectedColumns = state.headers.map((_, index) => index).filter(index => state.exportColumns.has(index));
-		if (!selectedColumns.length) { showToast('Select at least one column to export.'); return; }
+		if (!selectedColumns.length) { showToast('Choose at least one column for your Excel report.'); return; }
 		const headers = selectedColumns.map(index => state.headers[index]);
 		const rows = sortedRows().map(row => selectedColumns.map(index => row[index] ?? ''));
 		const printExportIndex = selectedColumns.indexOf(state.printIndex);
@@ -311,7 +311,7 @@
 		XLSX.utils.book_append_sheet(workbook, worksheet, 'Records');
 		const baseName = (state.fileName || 'records').replace(/\.[^.]+$/, '').replace(/[\\/:*?"<>|]/g, '-');
 		XLSX.writeFile(workbook, `${baseName}-formatted.xlsx`);
-		showToast(`Exported ${rows.length.toLocaleString()} formatted records to Excel.`);
+		showToast(`Your Excel report is ready with ${rows.length.toLocaleString()} formatted records.`);
 	}
 
 	elements.browseButton.addEventListener('click', event => { event.stopPropagation(); elements.fileInput.click(); });
@@ -353,13 +353,13 @@
 		elements.fileNotice.hidden = true; elements.dropZone.hidden = false; elements.exportButton.disabled = true;
 		elements.columnPicker.hidden = true; elements.columnOptions.replaceChildren(); elements.columnCount.textContent = '';
 		elements.searchInput.disabled = true; elements.sortSelect.disabled = true; elements.searchInput.value = ''; state.query = '';
-		render(); showToast('File removed. You can import another one.');
+		render(); showToast('Export removed. You can choose another IDNOW file.');
 	});
 	elements.formatToggle.addEventListener('click', () => {
 		const expanded = elements.formatToggle.getAttribute('aria-expanded') === 'true';
 		elements.formatToggle.setAttribute('aria-expanded', String(!expanded));
 		elements.formatDetails.hidden = expanded;
-		elements.formatToggle.innerHTML = expanded ? 'See expected columns <span>⌄</span>' : 'Hide expected columns <span>⌃</span>';
+		elements.formatToggle.innerHTML = expanded ? 'View supported columns <span>⌄</span>' : 'Hide supported columns <span>⌃</span>';
 	});
 	elements.searchInput.addEventListener('input', event => { state.query = event.target.value; render(); });
 	elements.sortSelect.addEventListener('change', event => { state.sort = event.target.value; render(); });

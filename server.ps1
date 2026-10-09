@@ -29,8 +29,17 @@ try {
                         Where-Object { Test-Path -LiteralPath (Join-Path $_.FullName 'index.html') -PathType Leaf } |
                         Sort-Object -Property Name |
                         ForEach-Object {
+                            $metadataPath = Join-Path $_.FullName 'tool.json'
+                            $description = 'A useful tool in my personal collection.'
+                            if (Test-Path -LiteralPath $metadataPath -PathType Leaf) {
+                                $metadata = Get-Content -LiteralPath $metadataPath -Raw | ConvertFrom-Json
+                                if ($metadata.description -is [string] -and -not [string]::IsNullOrWhiteSpace($metadata.description)) {
+                                    $description = $metadata.description.Trim()
+                                }
+                            }
                             @{
                                 name = $_.Name
+                                description = $description
                                 url = '/' + [System.Uri]::EscapeDataString($_.Name) + '/index.html'
                             }
                         }

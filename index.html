@@ -4,7 +4,7 @@
   <meta charset="utf-8">
   <meta name="viewport" content="width=device-width, initial-scale=1">
   <meta name="theme-color" content="#101312">
-  <title>AJB Tools</title>
+  <title>AJB | My Personal Toolkit</title>
   <style>
     @import url('https://fonts.googleapis.com/css2?family=DM+Mono:wght@400;500&family=Manrope:wght@400;500;600;700;800&display=swap');
 
@@ -108,7 +108,7 @@
     .refresh-button svg { width: 15px; height: 15px; }
     .tool-grid { display: grid; grid-template-columns: repeat(3, minmax(0, 1fr)); gap: 13px; }
     .tool-card {
-      min-height: 142px; display: flex; flex-direction: column; justify-content: space-between; padding: 18px;
+      min-height: 176px; display: flex; flex-direction: column; justify-content: space-between; padding: 18px;
       border: 1px solid var(--line); border-radius: 10px; background: var(--panel); color: inherit; text-decoration: none;
       box-shadow: var(--shadow); transition: transform .18s ease, border-color .18s ease, background .18s ease;
       animation: appear .35s both;
@@ -120,7 +120,12 @@
     .open-icon { width: 15px; height: 15px; color: var(--muted); }
     .tool-card:hover .open-icon { color: var(--cyan); }
     .tool-name { overflow: hidden; color: var(--ink); font-size: 14px; font-weight: 700; text-overflow: ellipsis; white-space: nowrap; }
-    .tool-type { color: var(--muted); font: 10px 'DM Mono', monospace; text-transform: uppercase; letter-spacing: .06em; }
+    .tool-content { display: grid; gap: 6px; min-width: 0; margin-top: 17px; }
+    .tool-summary { display: -webkit-box; overflow: hidden; color: var(--muted); font-size: 11px; line-height: 1.55; line-clamp: 2; -webkit-box-orient: vertical; -webkit-line-clamp: 2; }
+    .card-bottom { margin-top: 18px; }
+    .tool-type, .tool-action { font: 10px 'DM Mono', monospace; text-transform: uppercase; letter-spacing: .04em; }
+    .tool-type { color: var(--muted); }
+    .tool-action { color: var(--cyan); }
     .empty-state { padding: 55px 20px; border: 1px dashed var(--line); border-radius: 10px; text-align: center; background: color-mix(in srgb, var(--panel) 58%, transparent); }
     .empty-mark { width: 42px; height: 42px; display: grid; place-items: center; margin: 0 auto 15px; border-radius: 12px; color: var(--cyan); background: color-mix(in srgb, var(--cyan) 12%, transparent); }
     .empty-mark svg { width: 20px; height: 20px; }
@@ -149,7 +154,7 @@
       .search-wrap { flex: 1; }
       .search { width: 100%; }
       .tool-grid { grid-template-columns: 1fr; }
-      .tool-card { min-height: 118px; }
+      .tool-card { min-height: 158px; }
       footer { flex-direction: column; }
     }
     @media (prefers-reduced-motion: reduce) { *, *::before, *::after { animation-duration: .01ms !important; transition-duration: .01ms !important; } }
@@ -160,10 +165,10 @@
     <header class="topbar">
       <a class="brand" href="/" aria-label="AJB Tools home">
         <span class="brand-mark">AJB</span>
-        <span><span class="brand-name">PERSONAL TOOLS</span><span class="brand-caption">LOCAL WORKSPACE / 01</span></span>
+        <span><span class="brand-name">MY PERSONAL TOOLKIT</span><span class="brand-caption">BUILT AND CURATED BY AJB</span></span>
       </a>
       <div class="top-actions">
-        <span class="status"><span class="status-dot"></span>LOCAL SYSTEM</span>
+        <span class="status"><span class="status-dot"></span>MY WORKSPACE</span>
         <button class="icon-button" id="theme-toggle" type="button" aria-label="Switch to light mode" title="Toggle light and dark mode">
           <svg class="moon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M20.9 13A8.8 8.8 0 0 1 11 3.1 8.9 8.9 0 1 0 20.9 13Z"/></svg>
           <svg class="sun" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><circle cx="12" cy="12" r="4"/><path d="M12 2v2m0 16v2M4.93 4.93l1.42 1.42m11.3 11.3 1.42 1.42M2 12h2m16 0h2M4.93 19.07l1.42-1.42m11.3-11.3 1.42-1.42"/></svg>
@@ -174,20 +179,20 @@
     <main>
       <section class="intro" aria-labelledby="welcome-title">
         <div>
-          <div class="eyebrow">MADE BY AJB, FOR MY EVERYDAY</div>
-          <h1 id="welcome-title">Hey, welcome<br>to my toolbox.</h1>
-          <p class="intro-copy">I built this little home base for the tools I use and make. Pick one to jump in; I'll keep adding more as I go.</p>
+          <div class="eyebrow">A COLLECTION OF TOOLS I USE AND MAKE</div>
+          <h1 id="welcome-title">Welcome to my<br>toolkit.</h1>
+          <p class="intro-copy">I built this space to keep the tools I use and create close at hand. Each one is designed to make a task simpler, faster, or more useful.</p>
         </div>
         <div class="clock" aria-live="off"><div class="clock-time" id="clock-time">--:--:--</div><div class="clock-date" id="clock-date">Loading local time</div></div>
       </section>
 
       <section aria-labelledby="tools-title">
         <div class="toolbar">
-          <div class="section-title"><h2 id="tools-title">Your tools</h2><span class="count" id="tool-count">0</span></div>
+          <div class="section-title"><h2 id="tools-title">My tools</h2><span class="count" id="tool-count">0</span></div>
           <div class="tools-controls">
             <label class="search-wrap">
               <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" aria-hidden="true"><circle cx="11" cy="11" r="7"/><path d="m20 20-4-4"/></svg>
-              <input class="search" id="tool-search" type="search" placeholder="Find a tool..." aria-label="Find a tool">
+              <input class="search" id="tool-search" type="search" placeholder="Search my tools..." aria-label="Search my tools">
             </label>
             <button class="icon-button refresh-button" id="refresh-tools" type="button" aria-label="Refresh tools" title="Refresh tool list">
               <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M20 7v5h-5M4 17v-5h5"/><path d="M5.6 9a7 7 0 0 1 11.6-2L20 12M4 12l2.8 5a7 7 0 0 0 11.6-2"/></svg>
@@ -195,16 +200,16 @@
           </div>
         </div>
         <div class="tool-grid" id="tool-grid" aria-live="polite"></div>
-        <div class="empty-filter" id="empty-filter">No tools match that search.</div>
+        <div class="empty-filter" id="empty-filter">I couldn't find a match. Try a different search.</div>
         <div class="empty-state" id="empty-state" hidden>
           <span class="empty-mark"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M3 7.5A1.5 1.5 0 0 1 4.5 6H10l2 2h7.5A1.5 1.5 0 0 1 21 9.5v8a1.5 1.5 0 0 1-1.5 1.5h-15A1.5 1.5 0 0 1 3 17.5z"/><path d="M3 10h18"/></svg></span>
-          <h3>I'm getting my tools together</h3>
-          <p>I haven't added any tools just yet. Once I add a tool folder with an <code>index.html</code> and deploy, it'll show up here.</p>
+          <h3>I'm still building out my toolkit</h3>
+          <p>I haven't published any tools here yet. When I add a tool folder with an <code>index.html</code> and deploy, you'll find it here.</p>
         </div>
       </section>
     </main>
 
-    <footer><span>AJB / PERSONAL WORKSPACE</span><span><span class="footer-accent">●</span> &nbsp; PRIVATE BY DESIGN</span></footer>
+    <footer><span>AJB / MY PERSONAL TOOLKIT</span><span><span class="footer-accent">●</span> &nbsp; MADE FOR MY WORKFLOW</span></footer>
   </div>
 
   <script>
@@ -229,15 +234,16 @@
 
     function renderTools() {
       const query = search.value.trim().toLocaleLowerCase();
-      const filtered = tools.filter(tool => tool.name.toLocaleLowerCase().includes(query));
+      const filtered = tools.filter(tool => tool.name.toLocaleLowerCase().includes(query) || (tool.description || '').toLocaleLowerCase().includes(query));
       grid.replaceChildren(...filtered.map((tool, index) => {
         const link = document.createElement('a');
         link.className = 'tool-card';
         link.href = tool.url;
         link.style.animationDelay = `${Math.min(index * 45, 270)}ms`;
-        link.setAttribute('aria-label', `Open ${tool.name}`);
-        link.innerHTML = '<span class="card-top"><span class="folder-icon"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M3 7.5A1.5 1.5 0 0 1 4.5 6H10l2 2h7.5A1.5 1.5 0 0 1 21 9.5v8a1.5 1.5 0 0 1-1.5 1.5h-15A1.5 1.5 0 0 1 3 17.5z"/><path d="M3 10h18"/></svg></span><svg class="open-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M7 17 17 7M7 7h10v10"/></svg></span><span class="card-bottom"><span class="tool-name"></span><span class="tool-type">OPEN</span></span>';
+        link.setAttribute('aria-label', `Open ${tool.name}: ${tool.description || 'A useful tool in my personal collection.'}`);
+        link.innerHTML = '<span class="card-top"><span class="folder-icon"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M3 7.5A1.5 1.5 0 0 1 4.5 6H10l2 2h7.5A1.5 1.5 0 0 1 21 9.5v8a1.5 1.5 0 0 1-1.5 1.5h-15A1.5 1.5 0 0 1 3 17.5z"/><path d="M3 10h18"/></svg></span><svg class="open-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M7 17 17 7M7 7h10v10"/></svg></span><span class="tool-content"><span class="tool-name"></span><span class="tool-summary"></span></span><span class="card-bottom"><span class="tool-type">PERSONAL TOOL</span><span class="tool-action">OPEN TOOL</span></span>';
         link.querySelector('.tool-name').textContent = tool.name;
+        link.querySelector('.tool-summary').textContent = tool.description || 'A useful tool in my personal collection.';
         return link;
       }));
       count.textContent = tools.length;
@@ -257,8 +263,8 @@
         grid.replaceChildren();
         count.textContent = '0';
         emptyState.hidden = false;
-        emptyState.querySelector('h3').textContent = "I couldn't load my tools just now";
-        emptyState.querySelector('p').textContent = 'Try refreshing the page in a moment.';
+        emptyState.querySelector('h3').textContent = "I couldn't load my toolkit just now";
+        emptyState.querySelector('p').textContent = 'Please refresh the page in a moment.';
       } finally {
         refreshButton.disabled = false;
       }
