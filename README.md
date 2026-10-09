@@ -1,6 +1,7 @@
 # AJB Tools
 
 My personal home base for small tools I use and build.
+<<<<<<< HEAD
 
 ## Add a tool description
 
@@ -21,3 +22,5 @@ Image Studio and File Converter process your selected files in the browser; the 
 File Converter's PDF-to-DOCX mode embeds a high-resolution image of each PDF page to preserve its visual layout. Those pages are not editable Word text. It also converts PDF pages to a PNG ZIP and combines image batches into PDFs.
 
 New tools are discovered from direct child folders containing `index.html` and `tool.json`. Add a short `description` field to `tool.json` to describe the tool on the dashboard.
+=======
+>>>>>>> 4c5b631ee76f13bc68f8934f028d98f3af903192
