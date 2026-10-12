@@ -1,11 +1,15 @@
 (() => {
 	'use strict';
 
-	const EXPECTED_HEADERS = ['IDNow ID', 'ID NUMBER', 'NAME', 'Last Printed', 'Date Created'];
-	const RECOGNIZABLE_HEADERS = new Set(['idnowid', 'idnumber', 'name', 'course', 'nameofguardian', 'guardianname', 'address', 'contactnumber', 'contactno', 'phonenumber', 'phone', 'lastprinted', 'datecreated']);
-	const state = { rows: [], headers: [], exportColumns: new Set(), fileName: '', sort: 'desc', query: '', printIndex: -1 };
+	const RECORD_HEADERS = {
+		student: ['IDNow ID', 'ID NUMBER', 'NAME', 'Last Printed', 'Date Created'],
+		employee: ['IDNow ID', 'ID #', 'NAME', 'POSITION', 'GUARDIAN', 'ADDRESS', 'CONTACT #', 'SSS #', 'TIN #', 'PAG-IBIG #', 'PHILHEALTH #', 'Last Printed']
+	};
+	const RECOGNIZABLE_HEADERS = new Set(['idnowid', 'idnumber', 'id', 'name', 'position', 'course', 'guardian', 'nameofguardian', 'guardianname', 'address', 'contact', 'contactnumber', 'contactno', 'phonenumber', 'phone', 'sss', 'tin', 'pagibig', 'philhealth', 'lastprinted', 'datecreated']);
+	const state = { rows: [], headers: [], exportColumns: new Set(), fileName: '', sort: 'desc', query: '', printIndex: -1, recordType: 'student' };
 	const elements = {
 		fileInput: document.getElementById('fileInput'), dropZone: document.getElementById('dropZone'), browseButton: document.getElementById('browseButton'),
+		recordTypeInputs: document.querySelectorAll('input[name="recordType"]'),
 		sampleButton: document.getElementById('sampleButton'), removeFile: document.getElementById('removeFile'), fileNotice: document.getElementById('fileNotice'),
 		fileName: document.getElementById('fileName'), fileMeta: document.getElementById('fileMeta'), formatToggle: document.getElementById('formatToggle'),
 		formatDetails: document.getElementById('formatDetails'), exportButton: document.getElementById('exportButton'), columnPicker: document.getElementById('columnPicker'),
@@ -132,6 +136,7 @@
 		elements.fileMeta.textContent = `${rows.length.toLocaleString()} ${rows.length === 1 ? 'record' : 'records'} detected`;
 		elements.fileNotice.hidden = false;
 		elements.dropZone.hidden = true;
+		elements.recordTypeInputs.forEach(input => { input.disabled = true; });
 		elements.exportButton.disabled = rows.length === 0;
 		elements.searchInput.disabled = rows.length === 0;
 		elements.sortSelect.disabled = rows.length === 0;
@@ -150,7 +155,7 @@
 			headers = parsed[0].map((header, index) => header || `Column ${index + 1}`);
 			rows = parsed.slice(1);
 		} else {
-			headers = [...EXPECTED_HEADERS];
+			headers = [...RECORD_HEADERS[state.recordType]];
 			rows = parsed;
 			if (rows.some(row => row.length > headers.length)) {
 				headers = headers.concat(Array.from({ length: Math.max(...rows.map(row => row.length)) - headers.length }, (_, index) => `Extra column ${index + 1}`));
@@ -319,19 +324,26 @@
 	elements.dropZone.addEventListener('keydown', event => { if (event.key === 'Enter' || event.key === ' ') { event.preventDefault(); elements.fileInput.click(); } });
 	elements.fileInput.addEventListener('change', event => { handleFile(event.target.files[0]); event.target.value = ''; });
 	elements.sampleButton.addEventListener('click', () => {
-		const sample = [
-			EXPECTED_HEADERS,
-			['5', '123123', 'Sample Name.', '17/09/2026 11:03:19', '25/07/2023 13:44:34'],
-			['8', '458921', 'Jordan Lee', '02/10/2026 09:24:08', '12/05/2024 08:12:10'],
-			['3', '771204', 'Morgan Chen', '28/09/2026 14:45:31', '19/11/2022 16:30:00'],
-			['11', '349876', 'Avery Patel', '21/09/2026 10:02:17', '04/02/2025 11:05:44'],
-			['2', '902115', 'Casey Rivera', '14/08/2026 16:18:02', '30/06/2021 09:15:26'],
-			['14', '611038', 'Taylor Kim', '03/07/2026 12:32:55', '17/03/2024 13:40:08'],
-			['6', '285430', 'Riley Brooks', '10/03/2026 08:47:16', '08/12/2020 10:22:32'],
-			['9', '537290', 'Jamie Wilson', '05/01/2026 15:06:41', '21/08/2023 14:18:05']
-		];
+		const sample = state.recordType === 'employee'
+			? [
+				RECORD_HEADERS.employee,
+				['5', '123123', 'Jordan Lee', 'Instructor', 'Morgan Lee', '123 Main Street', '09171234567', '123-456-789', '123-456-789-000', '1234-5678-9012', '12-3456789-0', '02/10/2026 09:24:08'],
+				['8', '458921', 'Avery Patel', 'Coordinator', 'Taylor Patel', '45 Garden Road', '09181234567', '987-654-321', '987-654-321-000', '9876-5432-1098', '98-7654321-0', '28/09/2026 14:45:31']
+			]
+			: [
+				RECORD_HEADERS.student,
+				['5', '123123', 'Sample Name.', '17/09/2026 11:03:19', '25/07/2023 13:44:34'],
+				['8', '458921', 'Jordan Lee', '02/10/2026 09:24:08', '12/05/2024 08:12:10'],
+				['3', '771204', 'Morgan Chen', '28/09/2026 14:45:31', '19/11/2022 16:30:00'],
+				['11', '349876', 'Avery Patel', '21/09/2026 10:02:17', '04/02/2025 11:05:44'],
+				['2', '902115', 'Casey Rivera', '14/08/2026 16:18:02', '30/06/2021 09:15:26'],
+				['14', '611038', 'Taylor Kim', '03/07/2026 12:32:55', '17/03/2024 13:40:08'],
+				['6', '285430', 'Riley Brooks', '10/03/2026 08:47:16', '08/12/2020 10:22:32'],
+				['9', '537290', 'Jamie Wilson', '05/01/2026 15:06:41', '21/08/2023 14:18:05']
+			];
 		processText(sample.map(row => row.join('\t')).join('\n'), 'sample-records.txt');
 	});
+	elements.recordTypeInputs.forEach(input => input.addEventListener('change', event => { state.recordType = event.target.value; }));
 	elements.columnOptions.addEventListener('change', event => {
 		const checkbox = event.target.closest('input[data-column-index]');
 		if (!checkbox) return;
@@ -351,6 +363,7 @@
 	elements.removeFile.addEventListener('click', () => {
 		state.rows = []; state.headers = []; state.exportColumns.clear(); state.fileName = ''; state.printIndex = -1;
 		elements.fileNotice.hidden = true; elements.dropZone.hidden = false; elements.exportButton.disabled = true;
+		elements.recordTypeInputs.forEach(input => { input.disabled = false; });
 		elements.columnPicker.hidden = true; elements.columnOptions.replaceChildren(); elements.columnCount.textContent = '';
 		elements.searchInput.disabled = true; elements.sortSelect.disabled = true; elements.searchInput.value = ''; state.query = '';
 		render(); showToast('Export removed. You can choose another IDNOW file.');

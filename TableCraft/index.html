@@ -36,6 +36,11 @@
 
             <section class="workspace" aria-label="TXT to Excel workspace">
                 <div class="section-heading"><div><div class="step-label"><span>01</span> IMPORT AN IDNOW EXPORT</div><h2>Start with a .txt file</h2></div><button id="sampleButton" class="text-button" type="button"><span aria-hidden="true">✳</span> Try a sample export</button></div>
+                <fieldset class="record-type-control" aria-label="Choose record type">
+                    <legend>RECORD TYPE</legend>
+                    <label><input type="radio" name="recordType" value="student" checked><span>Student</span></label>
+                    <label><input type="radio" name="recordType" value="employee"><span>Employee</span></label>
+                </fieldset>
                 <div id="dropZone" class="drop-zone" tabindex="0" role="button" aria-label="Choose or drop a text file">
                     <input id="fileInput" type="file" accept=".txt,.tsv,.csv,text/plain,text/csv" hidden>
                     <div class="upload-icon"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M12 16V4m0 0L7.5 8.5M12 4l4.5 4.5M5 14.5v4A1.5 1.5 0 0 0 6.5 20h11a1.5 1.5 0 0 0 1.5-1.5v-4"/></svg></div>
@@ -44,7 +49,7 @@
                 </div>
                 <div id="fileNotice" class="file-notice" hidden><span class="file-symbol">TXT</span><span id="fileName" class="file-name"></span><span id="fileMeta" class="file-meta"></span><button id="removeFile" class="icon-button" type="button" aria-label="Remove imported file">×</button></div>
                 <div class="format-hint"><span class="hint-icon">i</span><span><strong>IDNOW exports work best with headers.</strong> Tab, comma, semicolon, or pipe-delimited files are detected automatically.</span><button id="formatToggle" class="hint-link" type="button" aria-expanded="false">View supported columns <span>⌄</span></button></div>
-                <div id="formatDetails" class="format-details" hidden>Common columns include <strong>IDNow ID</strong>, <strong>ID NUMBER</strong>, <strong>NAME</strong>, <strong>Course</strong>, <strong>Name of Guardian</strong>, <strong>Address</strong>, <strong>Contact Number</strong>, <strong>Last Printed</strong>, and <strong>Date Created</strong>. Column names are matched flexibly; extra columns are kept in the preview and can be selected for export.</div>
+                <div id="formatDetails" class="format-details" hidden>Student columns include <strong>IDNow ID</strong>, <strong>ID NUMBER</strong>, <strong>NAME</strong>, <strong>Course</strong>, <strong>Name of Guardian</strong>, <strong>Address</strong>, <strong>Contact Number</strong>, <strong>Last Printed</strong>, and <strong>Date Created</strong>. Employee columns include <strong>IDNow ID</strong>, <strong>ID #</strong>, <strong>NAME</strong>, <strong>POSITION</strong>, <strong>GUARDIAN</strong>, <strong>ADDRESS</strong>, <strong>CONTACT #</strong>, <strong>SSS #</strong>, <strong>TIN #</strong>, <strong>PAG-IBIG #</strong>, <strong>PHILHEALTH #</strong>, and <strong>Last Printed</strong>. Column names are matched flexibly; extra columns can be selected for export.</div>
             </section>
 
             <section class="results" aria-label="Data preview">

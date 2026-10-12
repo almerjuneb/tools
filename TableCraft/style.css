@@ -59,6 +59,15 @@ h2 { margin-top: 8px; font: 700 20px 'Manrope', sans-serif; letter-spacing: -.55
 .text-button { padding: 7px 0; border: 0; background: none; color: #547ecc; font-size: 11px; font-weight: 600; }
 .text-button span { margin-right: 5px; }
 .text-button:hover, .hint-link:hover, .inline-button:hover { color: #245fca; }
+.record-type-control { min-width: 0; margin: 16px 0 0; padding: 0; display: flex; align-items: center; gap: 4px; border: 0; }
+.record-type-control legend { float: left; margin-right: 10px; color: #8994a3; font-size: 8px; font-weight: 700; letter-spacing: .08em; }
+.record-type-control label { position: relative; cursor: pointer; }
+.record-type-control input { position: absolute; width: 1px; height: 1px; opacity: 0; }
+.record-type-control label span { min-width: 70px; padding: 6px 10px; display: block; border: 1px solid #e3e8ef; color: #68768a; background: #fff; text-align: center; font-size: 10px; font-weight: 600; }
+.record-type-control label:first-of-type span { border-radius: 4px 0 0 4px; }
+.record-type-control label:last-of-type span { margin-left: -5px; border-radius: 0 4px 4px 0; }
+.record-type-control input:checked + span { position: relative; border-color: #7398dd; color: #315fae; background: #eff4ff; }
+.record-type-control input:focus-visible + span { outline: 2px solid #3977df; outline-offset: 2px; }
 .drop-zone { min-height: 133px; margin-top: 18px; padding: 20px 27px; display: flex; align-items: center; gap: 17px; border: 1px dashed #cbd6e5; border-radius: 9px; background: #fbfcfe; cursor: pointer; transition: border .2s, background .2s, transform .2s; }
 .drop-zone:hover, .drop-zone:focus-visible, .drop-zone.is-dragging { outline: none; border-color: #5888e2; background: #f4f8ff; }
 .drop-zone.is-dragging { transform: scale(1.008); }
