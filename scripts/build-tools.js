@@ -9,6 +9,10 @@ const ignoredDirectories = new Set(['.git', '.vercel', 'dist', 'node_modules']);
 await rm(outputDirectory, { recursive: true, force: true });
 await mkdir(outputDirectory, { recursive: true });
 await cp(join(projectRoot, 'index.html'), join(outputDirectory, 'index.html'));
+await cp(join(projectRoot, 'img'), join(outputDirectory, 'img'), { recursive: true });
+for (const asset of ['shared-tools.css', 'shared-tools.js']) {
+  await cp(join(projectRoot, asset), join(outputDirectory, asset));
+}
 
 const entries = await readdir(projectRoot, { withFileTypes: true });
 const tools = [];

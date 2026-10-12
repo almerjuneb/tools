@@ -3,9 +3,9 @@
 
 	const RECORD_HEADERS = {
 		student: ['IDNow ID', 'ID NUMBER', 'NAME', 'Last Printed', 'Date Created'],
-		employee: ['IDNow ID', 'ID #', 'NAME', 'POSITION', 'GUARDIAN', 'ADDRESS', 'CONTACT #', 'SSS #', 'TIN #', 'PAG-IBIG #', 'PHILHEALTH #', 'Last Printed']
+		employee: ['IDNow ID', 'ID #', 'NAME', 'POSITION', 'GUARDIAN', 'ADDRESS', 'CONTACT #', 'SSS #', 'TIN #', 'PAG-IBIG #', 'PHILHEALTH #', 'Card Layout', 'Last Printed']
 	};
-	const RECOGNIZABLE_HEADERS = new Set(['idnowid', 'idnumber', 'id', 'name', 'position', 'course', 'guardian', 'nameofguardian', 'guardianname', 'address', 'contact', 'contactnumber', 'contactno', 'phonenumber', 'phone', 'sss', 'tin', 'pagibig', 'philhealth', 'lastprinted', 'datecreated']);
+	const RECOGNIZABLE_HEADERS = new Set(['idnowid', 'idnumber', 'id', 'name', 'position', 'course', 'guardian', 'nameofguardian', 'guardianname', 'address', 'contact', 'contactnumber', 'contactno', 'phonenumber', 'phone', 'sss', 'tin', 'pagibig', 'philhealth', 'cardlayout', 'lastprinted', 'datecreated']);
 	const state = { rows: [], headers: [], exportColumns: new Set(), fileName: '', sort: 'desc', query: '', printIndex: -1, recordType: 'student' };
 	const elements = {
 		fileInput: document.getElementById('fileInput'), dropZone: document.getElementById('dropZone'), browseButton: document.getElementById('browseButton'),
@@ -327,8 +327,8 @@
 		const sample = state.recordType === 'employee'
 			? [
 				RECORD_HEADERS.employee,
-				['5', '123123', 'Jordan Lee', 'Instructor', 'Morgan Lee', '123 Main Street', '09171234567', '123-456-789', '123-456-789-000', '1234-5678-9012', '12-3456789-0', '02/10/2026 09:24:08'],
-				['8', '458921', 'Avery Patel', 'Coordinator', 'Taylor Patel', '45 Garden Road', '09181234567', '987-654-321', '987-654-321-000', '9876-5432-1098', '98-7654321-0', '28/09/2026 14:45:31']
+				['5', '123123', 'Jordan Lee', 'Instructor', 'Morgan Lee', '123 Main Street', '09171234567', '123-456-789', '123-456-789-000', '1234-5678-9012', '12-3456789-0', 'Standard', '02/10/2026 09:24:08'],
+				['8', '458921', 'Avery Patel', 'Coordinator', 'Taylor Patel', '45 Garden Road', '09181234567', '987-654-321', '987-654-321-000', '9876-5432-1098', '98-7654321-0', 'Compact', '28/09/2026 14:45:31']
 			]
 			: [
 				RECORD_HEADERS.student,

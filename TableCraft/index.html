@@ -1,25 +1,28 @@
 <!DOCTYPE html>
-<html lang="en">
+<html lang="en" data-theme="dark">
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <meta name="theme-color" content="#f5f7fb">
     <title>TableCraft | IDNOW TXT to Excel Reports</title>
+    <link rel="icon" type="image/svg+xml" href="../img/favicon-tablecraft.svg">
     <link rel="preconnect" href="https://fonts.googleapis.com">
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
     <link href="https://fonts.googleapis.com/css2?family=DM+Sans:wght@400;500;600;700&family=Manrope:wght@400;500;600;700;800&display=swap" rel="stylesheet">
     <link rel="stylesheet" href="style.css">
+    <link rel="stylesheet" href="../shared-tools.css">
     <script src="https://cdn.jsdelivr.net/npm/xlsx-js-style@1.2.0/dist/xlsx.bundle.js"></script>
+    <script src="../shared-tools.js" defer></script>
     <script src="script.js" defer></script>
 </head>
 <body>
     <div class="app-shell">
         <header class="topbar">
-            <a class="brand" href="#" aria-label="Tablecraft home">
-                <span class="brand-mark" aria-hidden="true"><span></span><span></span><span></span><span></span></span>
-                <span>tablecraft<span class="brand-dot">.</span></span>
+            <a class="brand" href="../index.html" aria-label="Tablecraft home">
+                <img class="brand-logo" src="../img/tablecraftt.png" alt="">
             </a>
             <div class="topbar-right"><span class="secure-indicator"><span></span> Your files stay on your device</span><span class="topbar-divider"></span><span class="edition">IDNOW → XLSX</span></div>
+            <a class="all-tools-button" href="../index.html" aria-label="All tools">ALL TOOLS <span aria-hidden="true">↗</span></a>
         </header>
 
         <main>
@@ -49,7 +52,7 @@
                 </div>
                 <div id="fileNotice" class="file-notice" hidden><span class="file-symbol">TXT</span><span id="fileName" class="file-name"></span><span id="fileMeta" class="file-meta"></span><button id="removeFile" class="icon-button" type="button" aria-label="Remove imported file">×</button></div>
                 <div class="format-hint"><span class="hint-icon">i</span><span><strong>IDNOW exports work best with headers.</strong> Tab, comma, semicolon, or pipe-delimited files are detected automatically.</span><button id="formatToggle" class="hint-link" type="button" aria-expanded="false">View supported columns <span>⌄</span></button></div>
-                <div id="formatDetails" class="format-details" hidden>Student columns include <strong>IDNow ID</strong>, <strong>ID NUMBER</strong>, <strong>NAME</strong>, <strong>Course</strong>, <strong>Name of Guardian</strong>, <strong>Address</strong>, <strong>Contact Number</strong>, <strong>Last Printed</strong>, and <strong>Date Created</strong>. Employee columns include <strong>IDNow ID</strong>, <strong>ID #</strong>, <strong>NAME</strong>, <strong>POSITION</strong>, <strong>GUARDIAN</strong>, <strong>ADDRESS</strong>, <strong>CONTACT #</strong>, <strong>SSS #</strong>, <strong>TIN #</strong>, <strong>PAG-IBIG #</strong>, <strong>PHILHEALTH #</strong>, and <strong>Last Printed</strong>. Column names are matched flexibly; extra columns can be selected for export.</div>
+                <div id="formatDetails" class="format-details" hidden>Student columns include <strong>IDNow ID</strong>, <strong>ID NUMBER</strong>, <strong>NAME</strong>, <strong>Course</strong>, <strong>Name of Guardian</strong>, <strong>Address</strong>, <strong>Contact Number</strong>, <strong>Last Printed</strong>, and <strong>Date Created</strong>. Employee columns include <strong>IDNow ID</strong>, <strong>ID #</strong>, <strong>NAME</strong>, <strong>POSITION</strong>, <strong>GUARDIAN</strong>, <strong>ADDRESS</strong>, <strong>CONTACT #</strong>, <strong>SSS #</strong>, <strong>TIN #</strong>, <strong>PAG-IBIG #</strong>, <strong>PHILHEALTH #</strong>, <strong>Card Layout</strong>, and <strong>Last Printed</strong>. Column names are matched flexibly; extra columns can be selected for export.</div>
             </section>
 
             <section class="results" aria-label="Data preview">

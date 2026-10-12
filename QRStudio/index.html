@@ -1,15 +1,18 @@
 <!doctype html>
-<html lang="en">
+<html lang="en" data-theme="dark">
 <head>
   <meta charset="utf-8">
   <meta name="viewport" content="width=device-width, initial-scale=1">
   <meta name="theme-color" content="#f3f6f1">
   <meta name="description" content="Create, customize, and export QR codes for links, Wi-Fi, contacts, and more.">
   <title>QR Studio | AJB Tools</title>
+  <link rel="icon" type="image/svg+xml" href="../img/favicon-qr-studio.svg">
   <link rel="preconnect" href="https://fonts.googleapis.com">
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
   <link href="https://fonts.googleapis.com/css2?family=DM+Mono:wght@400;500&family=Manrope:wght@400;500;600;700;800&display=swap" rel="stylesheet">
   <link rel="stylesheet" href="style.css">
+  <link rel="stylesheet" href="../shared-tools.css">
+  <script src="../shared-tools.js" defer></script>
   <script type="module">
     try {
       const { default: QRCode } = await import('https://cdn.jsdelivr.net/npm/qrcode@1.5.4/+esm');
@@ -24,12 +27,9 @@
 <body>
   <div class="app-shell">
     <header class="topbar">
-      <a class="brand" href="/" aria-label="AJB Tools home">
-        <span class="brand-mark" aria-hidden="true"><svg viewBox="0 0 32 32" fill="none"><path d="M4 4h9v9H4zM19 4h9v9h-9zM4 19h9v9H4z"/><path d="M19 19h4v4h-4zm6 0h3m-9 6v3m4-3h3v3h-3zm5 2h1"/></svg></span>
-        <span><strong>QR STUDIO</strong><small>AJB PERSONAL TOOLKIT</small></span>
-      </a>
+      <a class="brand" href="../index.html" aria-label="AJB Tools home"><img class="brand-logo" src="../img/qr-studio.png" alt=""></a>
       <div class="topbar-status"><span class="status-led"></span> LOCAL GENERATION <span class="status-divider"></span> NO SIGN-IN</div>
-      <a class="back-link" href="/" aria-label="Back to AJB Tools">ALL TOOLS <span aria-hidden="true">↗</span></a>
+      <a class="back-link all-tools-button" href="../index.html" aria-label="All tools">ALL TOOLS <span aria-hidden="true">↗</span></a>
     </header>
 
     <main>
