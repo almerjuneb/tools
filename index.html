@@ -131,49 +131,6 @@
     .empty-filter { display: none; padding: 30px 16px; color: var(--muted); font-size: 13px; text-align: center; }
     footer { display: flex; justify-content: space-between; gap: 12px; margin-top: 62px; padding-top: 15px; border-top: 1px solid var(--line); color: var(--muted); font: 10px 'DM Mono', monospace; text-transform: uppercase; letter-spacing: .06em; }
     .footer-accent { color: var(--cyan); }
-    .assistant-launcher { position: fixed; z-index: 20; right: 28px; bottom: 25px; display: flex; align-items: center; gap: 10px; min-height: 54px; padding: 0 18px 0 13px; border: 1px solid var(--accent); border-radius: 9px; background: var(--accent); color: var(--accent-ink); box-shadow: 0 12px 36px rgba(0, 0, 0, .28); font-size: 12px; font-weight: 800; cursor: pointer; transition: transform .18s ease, box-shadow .18s ease; }
-    .assistant-launcher:hover { transform: translateY(-3px); box-shadow: 0 16px 40px rgba(0, 0, 0, .34); }
-    .assistant-launcher svg { width: 21px; height: 21px; }
-    .assistant-launcher-mark { width: 29px; height: 29px; display: grid; place-items: center; border: 1px solid color-mix(in srgb, var(--accent-ink) 22%, transparent); border-radius: 7px; font: 10px 'DM Mono', monospace; }
-    .assistant-window { position: fixed; z-index: 21; right: 28px; bottom: 91px; width: min(390px, calc(100vw - 32px)); height: min(590px, calc(100dvh - 120px)); display: flex; flex-direction: column; overflow: hidden; border: 1px solid var(--line); border-radius: 12px; background: var(--panel); box-shadow: 0 24px 80px rgba(0, 0, 0, .42); transform-origin: bottom right; animation: chat-in .2s ease both; }
-    .assistant-window[hidden] { display: none; }
-    .assistant-head { display: flex; align-items: center; gap: 11px; min-height: 73px; padding: 13px 15px; border-bottom: 1px solid var(--line); background: var(--panel-raised); }
-    .assistant-avatar { width: 38px; height: 38px; flex: 0 0 38px; display: grid; place-items: center; border-radius: 9px; background: var(--accent); color: var(--accent-ink); font: 11px 'DM Mono', monospace; font-weight: 500; }
-    .assistant-heading { min-width: 0; flex: 1; }
-    .assistant-heading strong { display: block; font-size: 13px; }
-    .assistant-presence { display: flex; align-items: center; gap: 6px; margin-top: 4px; color: var(--muted); font: 9px 'DM Mono', monospace; text-transform: uppercase; }
-    .assistant-presence::before { content: ''; width: 6px; height: 6px; border-radius: 50%; background: var(--cyan); box-shadow: 0 0 8px var(--cyan); }
-    .assistant-head-actions { display: flex; gap: 6px; }
-    .assistant-head-actions button { width: 32px; height: 32px; display: grid; place-items: center; border: 1px solid transparent; border-radius: 7px; background: transparent; color: var(--muted); cursor: pointer; }
-    .assistant-head-actions button:hover { border-color: var(--line); color: var(--ink); }
-    .assistant-head-actions svg { width: 16px; height: 16px; }
-    .assistant-messages { flex: 1; overflow-y: auto; display: flex; flex-direction: column; gap: 14px; padding: 18px 15px 12px; scroll-behavior: smooth; }
-    .assistant-welcome { padding: 5px 2px 2px; animation: appear .3s both; }
-    .assistant-date { margin-bottom: 11px; color: var(--muted); font: 9px 'DM Mono', monospace; letter-spacing: .08em; text-transform: uppercase; }
-    .assistant-bubble { max-width: 88%; padding: 11px 12px; border: 1px solid var(--line); border-radius: 3px 10px 10px 10px; background: var(--panel-raised); color: var(--ink); font-size: 12px; line-height: 1.65; overflow-wrap: anywhere; white-space: pre-wrap; animation: appear .2s both; }
-    .assistant-message { display: flex; flex-direction: column; align-items: flex-start; gap: 5px; }
-    .assistant-message.user { align-items: flex-end; }
-    .assistant-message.user .assistant-bubble { border-color: color-mix(in srgb, var(--cyan) 40%, var(--line)); border-radius: 10px 3px 10px 10px; background: color-mix(in srgb, var(--cyan) 13%, var(--panel)); }
-    .assistant-message-label { padding: 0 3px; color: var(--muted); font: 8px 'DM Mono', monospace; text-transform: uppercase; letter-spacing: .05em; }
-    .assistant-suggestions { display: flex; flex-wrap: wrap; gap: 7px; margin-top: 13px; }
-    .assistant-suggestion { min-height: 31px; padding: 0 10px; border: 1px solid var(--line); border-radius: 6px; background: transparent; color: var(--cyan); font-size: 10px; text-align: left; cursor: pointer; transition: border-color .16s ease, background .16s ease; }
-    .assistant-suggestion:hover { border-color: var(--cyan); background: color-mix(in srgb, var(--cyan) 8%, transparent); }
-    .assistant-typing { display: flex; align-items: center; gap: 4px; min-height: 37px; }
-    .assistant-typing i { width: 5px; height: 5px; border-radius: 50%; background: var(--muted); animation: typing 1s infinite ease-in-out; }
-    .assistant-typing i:nth-child(2) { animation-delay: .12s; }
-    .assistant-typing i:nth-child(3) { animation-delay: .24s; }
-    .assistant-compose { padding: 11px 13px 9px; border-top: 1px solid var(--line); background: var(--panel-raised); }
-    .assistant-form { display: flex; align-items: end; gap: 8px; padding: 7px 7px 7px 11px; border: 1px solid var(--line); border-radius: 8px; background: var(--panel); transition: border-color .16s ease; }
-    .assistant-form:focus-within { border-color: var(--cyan); }
-    .assistant-input { flex: 1; width: 100%; min-height: 34px; max-height: 100px; resize: none; padding: 8px 0 4px; border: 0; outline: 0; background: transparent; color: var(--ink); font-size: 12px; line-height: 1.45; }
-    .assistant-input::placeholder { color: var(--muted); }
-    .assistant-send { width: 34px; height: 34px; flex: 0 0 34px; display: grid; place-items: center; border: 0; border-radius: 6px; background: var(--accent); color: var(--accent-ink); cursor: pointer; transition: opacity .16s ease, transform .16s ease; }
-    .assistant-send:hover { transform: translateY(-1px); }
-    .assistant-send:disabled { opacity: .45; cursor: wait; }
-    .assistant-send svg { width: 17px; height: 17px; }
-    .assistant-footnote { margin: 8px 2px 0; color: var(--muted); font: 8px 'DM Mono', monospace; text-align: center; }
-    @keyframes chat-in { from { opacity: 0; transform: translateY(8px) scale(.98); } to { opacity: 1; transform: translateY(0) scale(1); } }
-    @keyframes typing { 0%, 60%, 100% { opacity: .35; transform: translateY(0); } 30% { opacity: 1; transform: translateY(-3px); } }
     .ajb-splash { position: fixed; z-index: 1000; inset: 0; display: grid; place-items: center; overflow: hidden; isolation: isolate; background: var(--bg); animation: splash-exit .7s cubic-bezier(.7,0,.3,1) 1.75s forwards; }
     .ajb-splash::before { position: absolute; z-index: -1; inset: 0; background-image: linear-gradient(var(--grid) 1px, transparent 1px), linear-gradient(90deg, var(--grid) 1px, transparent 1px); background-size: 48px 48px; content: ''; mask-image: radial-gradient(ellipse at center, #000 4%, transparent 75%); animation: splash-grid 1.8s ease both; }
     .ajb-splash::after { position: absolute; z-index: -1; top: 50%; left: -45%; width: 82%; height: 1px; background: linear-gradient(90deg, transparent, var(--cyan), var(--accent), transparent); box-shadow: 0 0 22px color-mix(in srgb, var(--cyan) 45%, transparent); content: ''; transform: rotate(-31deg); animation: splash-sweep 1.2s cubic-bezier(.2,.7,.2,1) .12s both; }
@@ -213,8 +170,6 @@
       .tool-card { min-height: 158px; }
       footer { flex-direction: column; }
       .ajb-splash-title { font-size: 88px; }
-      .assistant-launcher { right: 16px; bottom: 16px; min-height: 50px; }
-      .assistant-window { right: 10px; bottom: 76px; height: min(590px, calc(100dvh - 94px)); }
     }
     @media (prefers-reduced-motion: reduce) { *, *::before, *::after { animation-duration: .01ms !important; transition-duration: .01ms !important; animation-delay: 0ms !important; } }
   </style>
@@ -271,39 +226,6 @@
 
     <footer><span>AJB / MY PERSONAL TOOLKIT</span><span><span class="footer-accent">●</span> &nbsp; MADE FOR MY WORKFLOW</span></footer>
   </div>
-
-    <button class="assistant-launcher" id="assistant-launcher" type="button" aria-haspopup="dialog" aria-expanded="false" aria-controls="assistant-window">
-      <span class="assistant-launcher-mark">AJB</span><span>Ask AJB</span>
-      <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M21 11.5a8.5 8.5 0 0 1-8.5 8.5 9 9 0 0 1-4-.9L3 21l1.9-5.5a9 9 0 0 1-.9-4A8.5 8.5 0 0 1 12.5 3h.5a8.5 8.5 0 0 1 8 8z"/><path d="M8 12h.01M12 12h.01M16 12h.01"/></svg>
-    </button>
-    <section class="assistant-window" id="assistant-window" role="dialog" aria-label="Ask AJB, your personal toolkit assistant" aria-modal="false" hidden>
-      <header class="assistant-head">
-        <span class="assistant-avatar" aria-hidden="true">AJB</span>
-        <div class="assistant-heading"><strong>Ask AJB</strong><span class="assistant-presence">Your toolkit sidekick</span></div>
-        <div class="assistant-head-actions">
-          <button id="assistant-new-chat" type="button" aria-label="Start a new chat" title="Start a new chat"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M12 20h9"/><path d="M16.5 3.5a2.12 2.12 0 0 1 3 3L8 18l-4 1 1-4Z"/><path d="M15 5l4 4"/></svg></button>
-          <button id="assistant-close" type="button" aria-label="Close chat" title="Close chat"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" aria-hidden="true"><path d="m18 6-12 12M6 6l12 12"/></svg></button>
-        </div>
-      </header>
-      <div class="assistant-messages" id="assistant-messages" aria-live="polite" aria-relevant="additions text">
-        <div class="assistant-welcome" id="assistant-welcome">
-          <div class="assistant-date">Your toolkit, decoded</div>
-          <div class="assistant-bubble">Hey! I'm AJB, your personal toolkit sidekick. Tell me what you're trying to get done and I'll point you to the right tool, then walk you through it. No random internet advice, just your toolkit.</div>
-          <div class="assistant-suggestions">
-            <button class="assistant-suggestion" type="button">Turn a PDF into Word</button>
-            <button class="assistant-suggestion" type="button">Make a QR code</button>
-            <button class="assistant-suggestion" type="button">Sort my IDNOW export</button>
-          </div>
-        </div>
-      </div>
-      <div class="assistant-compose">
-        <form class="assistant-form" id="assistant-form">
-          <textarea class="assistant-input" id="assistant-input" rows="1" maxlength="2000" placeholder="What are we figuring out?" aria-label="Message AJB"></textarea>
-          <button class="assistant-send" id="assistant-send" type="submit" aria-label="Send message" title="Send message"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="m22 2-7 20-4-9-9-4Z"/><path d="M22 2 11 13"/></svg></button>
-        </form>
-        <p class="assistant-footnote">DEEPSEEK POWERED · TOOLKIT QUESTIONS ONLY</p>
-      </div>
-    </section>
 
   <script>
     const splash = document.querySelector('#ajb-splash');
@@ -395,107 +317,6 @@
 
     search.addEventListener('input', renderTools);
     document.querySelector('#refresh-tools').addEventListener('click', loadTools);
-
-    const assistantLauncher = document.querySelector('#assistant-launcher');
-    const assistantWindow = document.querySelector('#assistant-window');
-    const assistantMessages = document.querySelector('#assistant-messages');
-    const assistantInput = document.querySelector('#assistant-input');
-    const assistantForm = document.querySelector('#assistant-form');
-    const assistantSend = document.querySelector('#assistant-send');
-    const chatHistory = [];
-    let chatPending = false;
-
-    function setChatOpen(isOpen) {
-      assistantWindow.hidden = !isOpen;
-      assistantLauncher.setAttribute('aria-expanded', String(isOpen));
-      if (isOpen) assistantInput.focus();
-    }
-
-    function addChatMessage(role, text) {
-      const message = document.createElement('div');
-      message.className = `assistant-message${role === 'user' ? ' user' : ''}`;
-      const label = document.createElement('span');
-      label.className = 'assistant-message-label';
-      label.textContent = role === 'user' ? 'You' : 'AJB';
-      const bubble = document.createElement('div');
-      bubble.className = 'assistant-bubble';
-      bubble.textContent = text;
-      message.append(label, bubble);
-      assistantMessages.append(message);
-      assistantMessages.scrollTop = assistantMessages.scrollHeight;
-      return message;
-    }
-
-    async function sendChatMessage(text) {
-      const messageText = text.trim();
-      if (!messageText || chatPending) return;
-      document.querySelector('#assistant-welcome')?.remove();
-      addChatMessage('user', messageText);
-      chatHistory.push({ role: 'user', content: messageText });
-      assistantInput.value = '';
-      assistantInput.style.height = '';
-      chatPending = true;
-      assistantSend.disabled = true;
-      const typing = addChatMessage('assistant', '');
-      typing.querySelector('.assistant-bubble').innerHTML = '<span class="assistant-typing" aria-label="AJB is typing"><i></i><i></i><i></i></span>';
-      try {
-        const response = await fetch('/api/chat', {
-          method: 'POST',
-          headers: { 'Content-Type': 'application/json' },
-          body: JSON.stringify({ messages: chatHistory.slice(-12), tools: tools.map(({ name, description, url }) => ({ name, description, url })) })
-        });
-        const result = await response.json();
-        if (!response.ok) throw new Error(result.error || 'I could not reach DeepSeek just now. Please try again.');
-        const answer = typeof result.reply === 'string' ? result.reply : 'I lost that thought for a second. Try asking me again?';
-        chatHistory.push({ role: 'assistant', content: answer });
-        typing.querySelector('.assistant-bubble').textContent = answer;
-      } catch (error) {
-        const message = error instanceof TypeError
-          ? 'I can’t reach my chat service yet. Deploy this toolkit to Vercel and add DEEPSEEK_API_KEY in the project’s Environment Variables to bring me online.'
-          : error.message;
-        typing.querySelector('.assistant-bubble').textContent = message;
-      } finally {
-        chatPending = false;
-        assistantSend.disabled = false;
-        assistantInput.focus();
-        assistantMessages.scrollTop = assistantMessages.scrollHeight;
-      }
-    }
-
-    assistantLauncher.addEventListener('click', () => setChatOpen(assistantWindow.hidden));
-    document.querySelector('#assistant-close').addEventListener('click', () => setChatOpen(false));
-    document.querySelector('#assistant-new-chat').addEventListener('click', () => {
-      if (chatPending) return;
-      chatHistory.length = 0;
-      assistantMessages.replaceChildren();
-      const welcome = document.createElement('div');
-      welcome.className = 'assistant-welcome';
-      welcome.innerHTML = '<div class="assistant-date">Fresh start</div><div class="assistant-bubble">New mission, new chat. Which tool are we putting to work?</div>';
-      assistantMessages.append(welcome);
-      assistantInput.focus();
-    });
-    assistantForm.addEventListener('submit', event => {
-      event.preventDefault();
-      sendChatMessage(assistantInput.value);
-    });
-    assistantInput.addEventListener('input', () => {
-      assistantInput.style.height = 'auto';
-      assistantInput.style.height = `${Math.min(assistantInput.scrollHeight, 100)}px`;
-    });
-    assistantInput.addEventListener('keydown', event => {
-      if (event.key === 'Enter' && !event.shiftKey) {
-        event.preventDefault();
-        assistantForm.requestSubmit();
-      }
-      if (event.key === 'Escape') setChatOpen(false);
-    });
-    assistantMessages.addEventListener('click', event => {
-      const suggestion = event.target.closest('.assistant-suggestion');
-      if (suggestion) sendChatMessage(suggestion.textContent);
-    });
-    document.addEventListener('keydown', event => {
-      if (event.key === 'Escape' && !assistantWindow.hidden) setChatOpen(false);
-    });
 
     updateClock();
     setInterval(updateClock, 1000);
