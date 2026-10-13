@@ -12,10 +12,14 @@
 		recordTypeInputs: document.querySelectorAll('input[name="recordType"]'),
 		sampleButton: document.getElementById('sampleButton'), removeFile: document.getElementById('removeFile'), fileNotice: document.getElementById('fileNotice'),
 		fileName: document.getElementById('fileName'), fileMeta: document.getElementById('fileMeta'), formatToggle: document.getElementById('formatToggle'),
-		formatDetails: document.getElementById('formatDetails'), exportButton: document.getElementById('exportButton'), columnPicker: document.getElementById('columnPicker'),
+		formatDetails: document.getElementById('formatDetails'), exportButton: document.getElementById('exportButton'), summaryExportButton: document.getElementById('summaryExportButton'),
+		summaryDialog: document.getElementById('summaryDialog'), summaryPeriod: document.getElementById('summaryPeriod'), summaryTypeColumn: document.getElementById('summaryTypeColumn'),
+		summaryFrom: document.getElementById('summaryFrom'), summaryTo: document.getElementById('summaryTo'), exportSummaryButton: document.getElementById('exportSummaryButton'),
+		closeSummaryDialog: document.getElementById('closeSummaryDialog'), cancelSummaryDialog: document.getElementById('cancelSummaryDialog'), columnPicker: document.getElementById('columnPicker'),
 		columnOptions: document.getElementById('columnOptions'), columnCount: document.getElementById('columnCount'), selectAllColumns: document.getElementById('selectAllColumns'),
 		clearColumns: document.getElementById('clearColumns'), totalCount: document.getElementById('totalCount'),
 		recentCount: document.getElementById('recentCount'), latestDate: document.getElementById('latestDate'), visibleCount: document.getElementById('visibleCount'),
+		dateFrom: document.getElementById('dateFrom'), dateTo: document.getElementById('dateTo'), clearDateFilter: document.getElementById('clearDateFilter'),
 		searchInput: document.getElementById('searchInput'), sortSelect: document.getElementById('sortSelect'), emptyState: document.getElementById('emptyState'),
 		tableWrap: document.getElementById('tableWrap'), table: document.getElementById('dataTable'), noResults: document.getElementById('noResults'),
 		footerText: document.getElementById('footerText'), toast: document.getElementById('toast')
@@ -80,6 +84,16 @@
 		return state.printIndex >= 0 ? parseDate(row[state.printIndex]) : null;
 	}
 
+	function dateFilteredRows() {
+		const from = elements.dateFrom.value ? new Date(`${elements.dateFrom.value}T00:00:00`).getTime() : null;
+		const to = elements.dateTo.value ? new Date(`${elements.dateTo.value}T23:59:59.999`).getTime() : null;
+		return sortedRows().filter(row => {
+			if (from === null && to === null) return true;
+			const date = dateValue(row);
+			return date && (from === null || date.getTime() >= from) && (to === null || date.getTime() <= to);
+		});
+	}
+
 	function activityClass(date) {
 		if (!date) return 'unknown';
 		const ageDays = (Date.now() - date.getTime()) / 86400000;
@@ -102,10 +116,23 @@
 		return headers.findIndex(header => /printed/i.test(header));
 	}
 
+	function identifyStudentTypeColumn(headers) {
+		return headers.findIndex(header => /course|program|studenttype|studentlevel|educationlevel|gradelevel|yearlevel|degree|classification|schoollevel/.test(normalizeHeader(header)));
+	}
+
+	function classifyStudentType(value) {
+		const normalized = normalizeHeader(value);
+		if (normalized === 'elementary') return 'Elementary';
+		if (normalized === 'juniorhighschool') return 'Junior High School';
+		if (normalized === 'seniorhighschool') return 'Senior High School';
+		return 'College';
+	}
+
 	function updateColumnSelection() {
 		const selectedCount = state.exportColumns.size;
 		elements.columnCount.textContent = `${selectedCount} of ${state.headers.length} selected`;
-		elements.exportButton.disabled = state.rows.length === 0 || selectedCount === 0;
+		elements.exportButton.disabled = state.rows.length === 0 || selectedCount === 0 || dateFilteredRows().length === 0;
+		elements.summaryExportButton.disabled = state.rows.length === 0 || state.printIndex < 0 || state.recordType !== 'student';
 	}
 
 	function renderColumnPicker() {
@@ -132,6 +159,11 @@
 		state.exportColumns = new Set(headers.map((_, index) => index));
 		state.fileName = fileName;
 		state.printIndex = identifyPrintColumn(headers);
+		elements.dateFrom.value = '';
+		elements.dateTo.value = '';
+		elements.dateFrom.disabled = state.printIndex < 0 || rows.length === 0;
+		elements.dateTo.disabled = state.printIndex < 0 || rows.length === 0;
+		elements.clearDateFilter.disabled = state.printIndex < 0 || rows.length === 0;
 		elements.fileName.textContent = fileName;
 		elements.fileMeta.textContent = `${rows.length.toLocaleString()} ${rows.length === 1 ? 'record' : 'records'} detected`;
 		elements.fileNotice.hidden = false;
@@ -223,7 +255,7 @@
 	}
 
 	function render() {
-		const allSorted = sortedRows();
+		const rangeFiltered = dateFilteredRows();
 		const now = Date.now();
 		const weekAgo = now - 7 * 86400000;
 		const datedRows = state.rows.map(dateValue).filter(Boolean);
@@ -244,9 +276,11 @@
 		}
 
 		const query = state.query.trim().toLowerCase();
-		const filtered = query ? allSorted.filter(row => row.some(value => String(value).toLowerCase().includes(query))) : allSorted;
+		const filtered = query ? rangeFiltered.filter(row => row.some(value => String(value).toLowerCase().includes(query))) : rangeFiltered;
+		updateColumnSelection();
 		elements.visibleCount.textContent = `${filtered.length.toLocaleString()} ${filtered.length === 1 ? 'row' : 'rows'}`;
-		elements.footerText.textContent = query ? `Showing ${filtered.length.toLocaleString()} of ${state.rows.length.toLocaleString()} records` : `${state.fileName} · ${state.rows.length.toLocaleString()} records`;
+		const hasFilters = query || elements.dateFrom.value || elements.dateTo.value;
+		elements.footerText.textContent = hasFilters ? `Showing ${filtered.length.toLocaleString()} of ${state.rows.length.toLocaleString()} records` : `${state.fileName} · ${state.rows.length.toLocaleString()} records`;
 		elements.noResults.hidden = filtered.length > 0;
 		elements.tableWrap.hidden = filtered.length === 0;
 
@@ -274,13 +308,116 @@
 		elements.table.querySelector('tbody').replaceWith(body);
 	}
 
+	function openSummaryDialog() {
+		if (state.recordType !== 'student' || state.printIndex < 0) {
+			showToast('The summary export needs student records and a Last Printed column.');
+			return;
+		}
+		elements.summaryTypeColumn.replaceChildren();
+		const typeColumns = state.headers.map((header, index) => ({ header, index })).filter(({ header }) => /course|program|type|level|degree|classification/i.test(header));
+		if (!typeColumns.length) typeColumns.push({ header: 'No student type field (count as Other)', index: -1 });
+		typeColumns.forEach(({ header, index }) => {
+			const option = document.createElement('option');
+			option.value = String(index);
+			option.textContent = header;
+			elements.summaryTypeColumn.appendChild(option);
+		});
+		const suggestedIndex = identifyStudentTypeColumn(state.headers);
+		elements.summaryTypeColumn.value = String(suggestedIndex >= 0 ? suggestedIndex : typeColumns[0].index);
+		elements.summaryFrom.value = elements.dateFrom.value;
+		elements.summaryTo.value = elements.dateTo.value;
+		elements.summaryFrom.max = elements.summaryTo.value;
+		elements.summaryTo.min = elements.summaryFrom.value;
+		elements.summaryDialog.showModal();
+	}
+
+	function createSummaryBuckets() {
+		const from = elements.summaryFrom.value ? new Date(`${elements.summaryFrom.value}T00:00:00`) : null;
+		const to = elements.summaryTo.value ? new Date(`${elements.summaryTo.value}T23:59:59.999`) : null;
+		if (from && to && from > to) return { error: 'The From date must be on or before the To date.' };
+		const datedRows = state.rows.map(row => ({ row, date: dateValue(row) })).filter(item => item.date);
+		const includedRows = datedRows.filter(({ date }) => (!from || date >= from) && (!to || date <= to));
+		if (!includedRows.length) return { error: 'No printed student records match this date range.' };
+
+		const earliest = from || new Date(Math.min(...includedRows.map(item => item.date.getTime())));
+		const latest = to || new Date(Math.max(...includedRows.map(item => item.date.getTime())));
+		const groupBy = elements.summaryPeriod.value;
+		const categories = ['Elementary', 'Junior High School', 'Senior High School', 'College'];
+		const buckets = new Map();		const periodKeys = [];
+		if (groupBy === 'year') {
+			for (let year = earliest.getFullYear(); year <= latest.getFullYear(); year += 1) {
+				const key = String(year);
+				periodKeys.push({ key, label: key });
+				buckets.set(key, Object.fromEntries(categories.map(category => [category, 0])));
+			}
+		} else {
+			const cursor = new Date(earliest.getFullYear(), earliest.getMonth(), 1);
+			const last = new Date(latest.getFullYear(), latest.getMonth(), 1);
+			while (cursor <= last) {
+				const key = `${cursor.getFullYear()}-${String(cursor.getMonth() + 1).padStart(2, '0')}`;
+				periodKeys.push({ key, label: new Intl.DateTimeFormat(undefined, { month: 'long', year: 'numeric' }).format(cursor) });
+				buckets.set(key, Object.fromEntries(categories.map(category => [category, 0])));
+				cursor.setMonth(cursor.getMonth() + 1);
+			}
+		}
+
+		const typeIndex = Number(elements.summaryTypeColumn.value);
+		includedRows.forEach(({ row, date }) => {
+			const key = groupBy === 'year' ? String(date.getFullYear()) : `${date.getFullYear()}-${String(date.getMonth() + 1).padStart(2, '0')}`;
+			const bucket = buckets.get(key);
+			if (bucket) bucket[classifyStudentType(typeIndex < 0 ? '' : row[typeIndex])] += 1;
+		});
+		const totals = Object.fromEntries(categories.map(category => [category, 0]));
+		const rows = periodKeys.map(({ key, label }) => {
+			const bucket = buckets.get(key);
+			const total = categories.reduce((sum, category) => sum + bucket[category], 0);
+			categories.forEach(category => { totals[category] += bucket[category]; });
+			return [label, ...categories.map(category => bucket[category]), total];
+		});
+		const grandTotal = categories.reduce((sum, category) => sum + totals[category], 0);
+		rows.push(['GRAND TOTAL', ...categories.map(category => totals[category]), grandTotal]);
+		return { headers: [groupBy === 'year' ? 'Year' : 'Month', ...categories, 'Grand Total'], rows, periodCount: periodKeys.length, recordCount: includedRows.length };
+	}
+
+	function exportSummaryWorkbook() {
+		if (!window.XLSX) { showToast('The Excel export library didn’t load. Check your connection and try again.'); return; }
+		const summary = createSummaryBuckets();
+		if (summary.error) { showToast(summary.error); return; }
+		const worksheet = XLSX.utils.aoa_to_sheet([summary.headers, ...summary.rows]);
+		worksheet['!cols'] = summary.headers.map((header, index) => ({
+			wch: index === 0 ? Math.max(18, String(header).length + 3) : Math.max(16, String(header).length + 3)
+		}));
+		worksheet['!freeze'] = { xSplit: 0, ySplit: 1, topLeftCell: 'A2', activePane: 'bottomLeft', state: 'frozen' };
+		worksheet['!autofilter'] = { ref: XLSX.utils.encode_range({ s: { r: 0, c: 0 }, e: { r: summary.periodCount, c: summary.headers.length - 1 } }) };
+		const range = XLSX.utils.decode_range(worksheet['!ref']);
+		for (let column = 0; column <= range.e.c; column += 1) {
+			const cell = worksheet[XLSX.utils.encode_cell({ r: 0, c: column })];
+			if (cell) cell.s = { fill: { patternType: 'solid', fgColor: { rgb: ['35547D', '49688F', '4B7180', '74664F', '526883', '35547D'][column % 6] } }, font: { bold: true, color: { rgb: 'FFFFFF' }, name: 'Aptos', sz: 11 }, alignment: { vertical: 'center' } };
+		}
+		for (let row = 1; row <= range.e.r; row += 1) {
+			for (let column = 0; column <= range.e.c; column += 1) {
+				const cell = worksheet[XLSX.utils.encode_cell({ r: row, c: column })];
+				if (!cell) continue;
+				const isGrandTotal = row === range.e.r;
+				cell.s = { fill: { patternType: 'solid', fgColor: { rgb: isGrandTotal ? 'E7EEF6' : (row % 2 ? 'FFFFFF' : 'F5F8FC') } }, font: { name: 'Aptos', color: { rgb: '334155' }, sz: 10, bold: isGrandTotal }, alignment: { vertical: 'center' }, border: { bottom: { style: isGrandTotal ? 'medium' : 'thin', color: { rgb: isGrandTotal ? '35547D' : 'E7ECF2' } } } };
+			}
+		}
+		worksheet['!rows'] = [{ hpt: 25 }, ...summary.rows.map((_, index) => ({ hpt: index === summary.rows.length - 1 ? 24 : 21 }))];
+		const workbook = XLSX.utils.book_new();
+		XLSX.utils.book_append_sheet(workbook, worksheet, 'Summary');
+		const baseName = (state.fileName || 'records').replace(/\.[^.]+$/, '').replace(/[\\/:*?"<>|]/g, '-');
+		XLSX.writeFile(workbook, `${baseName}-summary.xlsx`);
+		elements.summaryDialog.close();
+		showToast(`Summary exported with ${summary.recordCount.toLocaleString()} printed student records.`);
+	}
+
 	function exportWorkbook() {
 		if (!state.rows.length) return;
 		if (!window.XLSX) { showToast('The Excel export library didn’t load. Check your connection and try again.'); return; }
 		const selectedColumns = state.headers.map((_, index) => index).filter(index => state.exportColumns.has(index));
 		if (!selectedColumns.length) { showToast('Choose at least one column for your Excel report.'); return; }
 		const headers = selectedColumns.map(index => state.headers[index]);
-		const rows = sortedRows().map(row => selectedColumns.map(index => row[index] ?? ''));
+		const rows = dateFilteredRows().map(row => selectedColumns.map(index => row[index] ?? ''));
 		const printExportIndex = selectedColumns.indexOf(state.printIndex);
 		const worksheet = XLSX.utils.aoa_to_sheet([headers, ...rows]);
 		const headerColors = ['35547D', '49688F', '4B7180', '74664F', '526883'];
@@ -366,6 +503,8 @@
 		elements.recordTypeInputs.forEach(input => { input.disabled = false; });
 		elements.columnPicker.hidden = true; elements.columnOptions.replaceChildren(); elements.columnCount.textContent = '';
 		elements.searchInput.disabled = true; elements.sortSelect.disabled = true; elements.searchInput.value = ''; state.query = '';
+		elements.dateFrom.value = ''; elements.dateTo.value = '';
+		elements.dateFrom.disabled = true; elements.dateTo.disabled = true; elements.clearDateFilter.disabled = true;
 		render(); showToast('Export removed. You can choose another IDNOW file.');
 	});
 	elements.formatToggle.addEventListener('click', () => {
@@ -375,6 +514,19 @@
 		elements.formatToggle.innerHTML = expanded ? 'View supported columns <span>⌄</span>' : 'Hide supported columns <span>⌃</span>';
 	});
 	elements.searchInput.addEventListener('input', event => { state.query = event.target.value; render(); });
+	elements.dateFrom.addEventListener('change', render);
+	elements.dateTo.addEventListener('change', render);
+	elements.summaryExportButton.addEventListener('click', openSummaryDialog);
+	elements.summaryFrom.addEventListener('input', () => { elements.summaryTo.min = elements.summaryFrom.value; });
+	elements.summaryTo.addEventListener('input', () => { elements.summaryFrom.max = elements.summaryTo.value; });
+	elements.closeSummaryDialog.addEventListener('click', () => elements.summaryDialog.close());
+	elements.cancelSummaryDialog.addEventListener('click', () => elements.summaryDialog.close());
+	elements.exportSummaryButton.addEventListener('click', exportSummaryWorkbook);
+	elements.clearDateFilter.addEventListener('click', () => {
+		elements.dateFrom.value = '';
+		elements.dateTo.value = '';
+		render();
+	});
 	elements.sortSelect.addEventListener('change', event => { state.sort = event.target.value; render(); });
 	elements.exportButton.addEventListener('click', exportWorkbook);
 	elements.dropZone.addEventListener('dragover', event => { event.preventDefault(); elements.dropZone.classList.add('is-dragging'); });

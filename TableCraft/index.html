@@ -56,7 +56,7 @@
             </section>
 
             <section class="results" aria-label="Data preview">
-                <div class="results-head"><div><div class="step-label"><span>02</span> REVIEW &amp; EXPORT</div><h2>Your report preview</h2><p class="results-subtitle">Sorted by most recent print date for a faster review.</p></div><button id="exportButton" class="export-button" type="button" disabled><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M12 3v12m0 0 4.5-4.5M12 15l-4.5-4.5M5 17v3h14v-3"/></svg><span>Export Excel</span><span class="export-ext">.XLSX</span></button></div>
+                <div class="results-head"><div><div class="step-label"><span>02</span> REVIEW &amp; EXPORT</div><h2>Your report preview</h2><p class="results-subtitle">Sorted by most recent print date for a faster review.</p></div><div class="export-actions"><button id="summaryExportButton" class="summary-export-button" type="button" disabled><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M4 19h16M6 16V9m4 7V5m4 11v-4m4 4V7"/></svg><span>Summary only</span></button><button id="exportButton" class="export-button" type="button" disabled><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M12 3v12m0 0 4.5-4.5M12 15l-4.5-4.5M5 17v3h14v-3"/></svg><span>Export Excel</span><span class="export-ext">.XLSX</span></button></div></div>
                 <div class="stats-row">
                     <div class="stat-card"><span class="stat-icon records-icon">▦</span><div><span class="stat-label">TOTAL RECORDS</span><strong id="totalCount">0</strong></div></div>
                     <div class="stat-card"><span class="stat-icon recent-icon">↗</span><div><span class="stat-label">PRINTED THIS WEEK</span><strong id="recentCount">0</strong></div></div>
@@ -68,16 +68,33 @@
                     <div id="columnOptions" class="column-options" role="group" aria-labelledby="columnPickerTitle"></div>
                 </section>
                 <div class="table-card">
+                    <div class="date-filter-bar" aria-label="Filter records by print date">
+                        <span class="date-filter-title">PRINT DATE</span>
+                        <label for="dateFrom">From</label><input id="dateFrom" type="date" aria-label="Print date from" disabled>
+                        <label for="dateTo">To</label><input id="dateTo" type="date" aria-label="Print date to" disabled>
+                        <button id="clearDateFilter" class="column-action" type="button" disabled>Clear dates</button>
+                    </div>
                     <div class="table-toolbar"><div class="table-title"><span class="live-dot"></span><strong>Records</strong><span id="visibleCount" class="row-count">0 rows</span></div><label class="search-box"><svg viewBox="0 0 24 24" aria-hidden="true"><circle cx="10.8" cy="10.8" r="6.3"/><path d="m15.5 15.5 4 4"/></svg><input id="searchInput" type="search" placeholder="Search records…" aria-label="Search records" disabled><kbd>Ctrl K</kbd></label><label class="sort-control" for="sortSelect"><span>Sort</span><select id="sortSelect" disabled><option value="desc">Newest first</option><option value="asc">Oldest first</option></select></label></div>
                     <div id="emptyState" class="empty-state"><div class="empty-illustration"><div class="empty-paper"><span></span><span></span><span></span></div><span class="empty-spark spark-one">✦</span><span class="empty-spark spark-two">✧</span></div><strong>Your report preview will appear here</strong><p>Add an IDNOW export or try a sample to review the table before downloading your Excel report.</p></div>
                     <div id="tableWrap" class="table-wrap" hidden><table id="dataTable"><thead></thead><tbody></tbody></table></div>
-                    <div id="noResults" class="no-results" hidden>No matching rows. Try another search.</div>
+                    <div id="noResults" class="no-results" hidden>No matching rows. Try another search or date range.</div>
                     <div class="table-footer"><span id="footerText">Waiting for a file</span><span><span class="footer-check">✓</span> Dates sorted automatically</span></div>
                 </div>
             </section>
             <footer class="page-footer"><span>Built to make my IDNOW reporting workflow faster.</span><span>TABLECRAFT <i>·</i> BUILT BY AJB</span></footer>
         </main>
     </div>
+    <dialog id="summaryDialog" class="summary-dialog" aria-labelledby="summaryDialogTitle">
+        <div class="summary-dialog-head"><div><div class="step-label">PRINT REPORT / SUMMARY ONLY</div><h2 id="summaryDialogTitle">Choose a reporting period</h2><p>Counts use the Last Printed date and the selected student type field.</p></div><button id="closeSummaryDialog" class="summary-close" type="button" aria-label="Close summary options">×</button></div>
+        <div class="summary-options">
+            <label for="summaryPeriod"><span>GROUP BY</span><select id="summaryPeriod"><option value="month">Monthly</option><option value="year">Whole year</option></select></label>
+            <label for="summaryTypeColumn"><span>STUDENT TYPE FIELD</span><select id="summaryTypeColumn"></select></label>
+            <label for="summaryFrom"><span>FROM</span><input id="summaryFrom" type="date"></label>
+            <label for="summaryTo"><span>TO</span><input id="summaryTo" type="date"></label>
+        </div>
+        <p id="summaryColumnHint" class="summary-column-hint">Course values Elementary, Junior High School, and Senior High School are counted as-is. Every other course value is counted as College.</p>
+        <div class="summary-dialog-actions"><button id="cancelSummaryDialog" class="summary-cancel" type="button">Cancel</button><button id="exportSummaryButton" class="summary-confirm" type="button"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M12 3v12m0 0 4-4m-4 4-4-4M5 16v4h14v-4"/></svg> Export summary .XLSX</button></div>
+    </dialog>
     <div id="toast" class="toast" role="status" aria-live="polite"></div>
 </body>
 </html>

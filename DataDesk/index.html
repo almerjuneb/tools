@@ -1,0 +1,76 @@
+<!doctype html>
+<html lang="en" data-theme="dark">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <meta name="theme-color" content="#101312">
+  <meta name="description" content="Turn text and spreadsheet files into clean, editable multi-table workbooks in your browser.">
+  <title>DataDesk | AJB Tools</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=DM+Mono:wght@400;500&family=Manrope:wght@400;500;600;700;800&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="style.css">
+  <link rel="stylesheet" href="../shared-tools.css">
+  <script src="https://cdn.jsdelivr.net/npm/xlsx@0.18.5/dist/xlsx.full.min.js"></script>
+  <script src="../shared-tools.js" defer></script>
+  <script src="app.js" defer></script>
+</head>
+<body>
+  <div class="app-shell">
+    <header class="topbar">
+      <a class="brand" href="../index.html" aria-label="AJB Tools home"><span class="brand-mark" aria-hidden="true">D<span>:</span></span><span class="brand-copy"><strong>DATA DESK</strong><small>TABLE WORKSPACE</small></span></a>
+      <div class="topbar-right"><span class="local-status"><i></i> LOCAL WORKSPACE</span><span class="topbar-rule"></span><span class="edition">SHEETS / RECORDS / REPORTS</span><a class="all-tools-button" href="../index.html">ALL TOOLS <span aria-hidden="true">↗</span></a></div>
+    </header>
+
+    <main>
+      <section class="intro">
+        <div class="intro-copy">
+          <p class="eyebrow">DATA PREPARATION / 01</p>
+          <h1>Turn loose data<br><span>into working tables.</span></h1>
+          <p>Bring in text or spreadsheet files, decide which fields belong, combine sources into separate tables, and clean everything up before export.</p>
+        </div>
+        <div class="intro-note"><span class="note-mark">D</span><div><strong>Made for desk work</strong><small>Flexible fields. Multiple tables.<br>Ready-to-share files.</small></div></div>
+      </section>
+
+      <section class="workbench" aria-label="Data table workspace">
+        <div class="workbench-head">
+          <div><p class="section-kicker">01 <span>/</span> COLLECT</p><h2>Bring in a source</h2><p class="section-subtitle">TXT, CSV, TSV, XLS, or XLSX. Choose the fields you want after import.</p></div>
+          <div class="source-actions"><button id="browseButton" class="button button-primary" type="button"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M12 16V4m0 0L7.5 8.5M12 4l4.5 4.5M5 14v4a2 2 0 0 0 2 2h10a2 2 0 0 0 2-2v-4"/></svg><span>Import file</span></button><button id="newTableButton" class="button button-quiet" type="button"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M12 5v14m-7-7h14"/></svg><span>New table</span></button><input id="fileInput" type="file" accept=".txt,.csv,.tsv,.xls,.xlsx,text/plain,text/csv" hidden></div>
+        </div>
+        <div id="dropZone" class="drop-zone" tabindex="0" role="button" aria-label="Choose or drop a data file"><span class="drop-glyph" aria-hidden="true"><svg viewBox="0 0 32 32"><path d="M7 4h12l7 7v17H7zM19 4v8h7M11 18h11M11 22h8"/><path d="M16 14v-4m0 0-2 2m2-2 2 2"/></svg></span><span><strong>Drop a file to start a table</strong><small>or choose a source above · file contents stay in this browser</small></span><span class="drop-formats">TXT · CSV · TSV · XLSX</span></div>
+      </section>
+
+      <section class="tables-section" aria-label="Table editor">
+        <div class="tables-heading"><div><p class="section-kicker">02 <span>/</span> SHAPE</p><h2>Your tables <span id="tableCount" class="count-badge">0</span></h2></div><div class="export-actions"><button id="exportCsvButton" class="button button-quiet" type="button" disabled><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M12 3v12m0 0 4-4m-4 4-4-4M5 16v4h14v-4"/></svg><span>Current CSV</span></button><button id="exportXlsxButton" class="button button-export" type="button" disabled><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M12 3v12m0 0 4-4m-4 4-4-4M5 16v4h14v-4"/></svg><span>All tables · Excel</span></button></div></div>
+        <div id="emptyState" class="empty-state"><span class="empty-grid" aria-hidden="true"><i></i><i></i><i></i><i></i><i></i><i></i><i></i><i></i><i></i></span><div><strong>Nothing on the desk yet</strong><p>Import a source file or start with a blank table. You can add more tables and files at any time.</p></div><button id="emptyImportButton" class="text-action" type="button">Choose a file <span aria-hidden="true">↗</span></button></div>
+        <div id="tableEditor" class="table-editor" hidden>
+          <div id="tableTabs" class="table-tabs" role="tablist" aria-label="Tables"></div>
+          <div class="editor-toolbar">
+            <div class="table-identity"><label class="sr-only" for="tableName">Table name</label><input id="tableName" class="table-name" type="text" maxlength="60" aria-label="Table name"><span id="tableMeta" class="table-meta"></span></div>
+            <div class="editor-actions"><label class="search-field"><svg viewBox="0 0 24 24" aria-hidden="true"><circle cx="10.5" cy="10.5" r="6"/><path d="m15 15 4 4"/></svg><input id="searchInput" type="search" placeholder="Find in table" aria-label="Find in current table"></label><label class="sort-field" for="sortColumn"><span>Sort</span><select id="sortColumn" aria-label="Sort by column"><option value="">Off</option></select></label><button id="addRowButton" class="icon-action" type="button" title="Add row" aria-label="Add row"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M12 5v14m-7-7h14"/></svg></button><button id="deleteTableButton" class="icon-action danger-action" type="button" title="Delete current table" aria-label="Delete current table"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M4 7h16m-10 4v6m4-6v6M6 7l1 13h10l1-13M9 7V4h6v3"/></svg></button></div>
+          </div>
+          <div class="field-add-row"><span class="field-add-label">TABLE FIELDS</span><form id="addColumnForm" class="field-add-form"><input id="newColumnName" type="text" maxlength="60" placeholder="New field name" aria-label="New field name"><button type="submit"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M12 5v14m-7-7h14"/></svg><span>Add field</span></button></form><span class="field-hint">Edit headers and cells directly</span></div>
+          <div class="table-scroll"><table id="dataTable"><thead></thead><tbody></tbody></table></div>
+          <div class="table-status"><span id="rowStatus">0 records</span><span id="sourceStatus">LOCAL DATA</span></div>
+        </div>
+      </section>
+
+      <section class="workflow-strip" aria-label="Workflow features"><div><span>01</span><strong>Review</strong><small>Pick the fields that matter</small></div><div><span>02</span><strong>Arrange</strong><small>Edit cells or join sources</small></div><div><span>03</span><strong>Deliver</strong><small>Separate sheets or CSV</small></div></section>
+      <footer class="page-footer"><span>DATA DESK <i>·</i> AJB PERSONAL TOOLKIT</span><span>FILES STAY ON THIS DEVICE</span></footer>
+    </main>
+  </div>
+
+  <dialog id="importDialog" class="import-dialog" aria-labelledby="importTitle">
+    <form id="importForm" method="dialog">
+      <div class="dialog-head"><div><p class="section-kicker">SOURCE REVIEW</p><h2 id="importTitle">Choose what comes in</h2><p id="importFileName" class="dialog-file-name"></p></div><button id="closeImportButton" class="dialog-close" type="button" aria-label="Close import dialog">×</button></div>
+      <div class="dialog-controls"><label class="dialog-field" for="sourceSheet"><span>WORKSHEET</span><select id="sourceSheet"></select></label><label class="dialog-field" for="headerRow"><span>HEADER ROW</span><select id="headerRow"></select></label><label class="dialog-field table-name-field" for="importTableName"><span>TABLE NAME</span><input id="importTableName" type="text" maxlength="60"></label></div>
+      <fieldset class="destination-choice"><legend>ADD THIS DATA</legend><label><input type="radio" name="destinationMode" value="new" checked><span>Create a separate table</span></label><label id="appendChoice"><input type="radio" name="destinationMode" value="append"><span>Append rows to</span></label><select id="destinationTable" aria-label="Choose table to append to" disabled></select></fieldset>
+      <div class="column-selection-head"><div><strong>Fields to include</strong><span id="selectedColumnCount">0 selected</span></div><div><button id="selectAllFields" type="button">All</button><button id="clearAllFields" type="button">None</button></div></div>
+      <div id="columnChoices" class="column-choices"></div>
+      <div class="import-preview-head"><strong>Preview</strong><span id="previewMeta"></span></div><div class="import-preview-scroll"><table id="importPreview"><thead></thead><tbody></tbody></table></div>
+      <div class="dialog-actions"><span id="importMessage" role="status"></span><button id="cancelImportButton" class="button button-quiet" type="button">Cancel</button><button id="confirmImportButton" class="button button-primary" type="submit">Add to workspace <span aria-hidden="true">→</span></button></div>
+    </form>
+  </dialog>
+  <div id="toast" class="toast" role="status" aria-live="polite"></div>
+</body>
+</html>
