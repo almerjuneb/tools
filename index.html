@@ -174,9 +174,10 @@
     @media (prefers-reduced-motion: reduce) { *, *::before, *::after { animation-duration: .01ms !important; transition-duration: .01ms !important; animation-delay: 0ms !important; } }
   </style>
   <link rel="stylesheet" href="shared-tools.css">
+  <script src="shared-tools.js" defer></script>
 </head>
 <body>
-  <div class="ambient-backdrop" aria-hidden="true"><video autoplay muted loop playsinline preload="metadata"><source src="./vid/bg-video.mp4" type="video/mp4"></video></div>
+  <div class="ambient-backdrop" aria-hidden="true"><video autoplay muted loop playsinline preload="metadata" data-dark-src="./vid/bg-video.mp4" data-light-src="./vid/white-bg-video.mp4"></video></div>
   <div class="ajb-splash" id="ajb-splash" aria-hidden="true"><div class="ajb-splash-content"><span class="ajb-splash-kicker"><span></span> PERSONAL WORKSPACE / 2026</span><strong class="ajb-splash-title">AJB</strong><span class="ajb-splash-rule"><span></span></span><span class="ajb-splash-caption">TOOLS BUILT AROUND YOUR WORKFLOW</span></div></div>
   <div class="shell">
     <header class="topbar">
@@ -238,23 +239,6 @@
         if (event.animationName === 'splash-exit') splash.remove();
       });
     }
-
-    const root = document.documentElement;
-    const themeToggle = document.querySelector('#theme-toggle');
-    const storedTheme = localStorage.getItem('ajb-theme');
-    if (storedTheme === 'light' || storedTheme === 'dark') root.dataset.theme = storedTheme;
-    themeToggle.setAttribute('aria-label', `Switch to ${root.dataset.theme === 'dark' ? 'light' : 'dark'} mode`);
-
-    themeToggle.addEventListener('click', () => {
-      root.dataset.theme = root.dataset.theme === 'dark' ? 'light' : 'dark';
-      localStorage.setItem('ajb-theme', root.dataset.theme);
-      themeToggle.setAttribute('aria-label', `Switch to ${root.dataset.theme === 'dark' ? 'light' : 'dark'} mode`);
-    });
-    window.addEventListener('storage', event => {
-      if (event.key !== 'ajb-theme' || (event.newValue !== 'light' && event.newValue !== 'dark')) return;
-      root.dataset.theme = event.newValue;
-      themeToggle.setAttribute('aria-label', `Switch to ${root.dataset.theme === 'dark' ? 'light' : 'dark'} mode`);
-    });
 
     const grid = document.querySelector('#tool-grid');
     const emptyState = document.querySelector('#empty-state');
